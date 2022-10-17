@@ -1,0 +1,44 @@
+BoxlayoutEx:
+
+<WidgetEx>:
+    cols: 3
+    Button:
+        text: "Click"
+        on_press: root.buttonPress()
+        font_name: "fonts/zh-cn.ttf"
+        font_size: "20dp"
+    Label:
+        text: root.my_text
+        font_name: "fonts/zh-cn.ttf"
+        font_size: "20dp"
+
+
+<BoxlayoutEx>:
+    ScrollView:
+        size_hint: 0.5, 1
+        List:
+            orientation: "vertical"
+            size_hint: 1, None
+            height: self.minimum_height
+    BoxLayout:
+        orientation: "vertical"
+        Button:
+            background_color: 0.7, 0.7, 0.7, 1
+            text: "2"
+        BoxLayout:
+            size_hint: 1, 0.2
+            Button:
+                text: "sub1" 
+            Button:
+                text: "sub2" 
+                
+<MainWidget>:
+    Button:
+        background_color: .34, .67, .13, 1
+        text: "Hello"
+        size: "80dp", "80dp"
+        pos: "300dp", "200dp"
+    Label:
+        text: "Sveiki"
+        size: "80dp", "80dp"
+        pos: "400dp", "200dp"
