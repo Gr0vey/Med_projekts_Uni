@@ -26,6 +26,7 @@ class List(BoxLayout):
                     size_hint=(1,None),
                     size=(dp(20),dp(20))
                     ))
+    
                 
 class BoxlayoutEx(BoxLayout):
     pass

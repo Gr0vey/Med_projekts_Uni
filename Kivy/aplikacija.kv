@@ -14,23 +14,41 @@ BoxlayoutEx:
 
 
 <BoxlayoutEx>:
-    ScrollView:
-        size_hint: 0.5, 1
-        List:
-            orientation: "vertical"
-            size_hint: 1, None
-            height: self.minimum_height
     BoxLayout:
         orientation: "vertical"
-        Button:
-            background_color: 0.7, 0.7, 0.7, 1
-            text: "2"
         BoxLayout:
-            size_hint: 1, 0.2
+            size_hint: 1, 0.08
             Button:
-                text: "sub1" 
+                text: "skoleni"
+                
             Button:
-                text: "sub2" 
+                text:"abmul"
+            Button:
+                text: ""
+                size_hint: 0.15, 1
+                   
+        BoxLayout:
+            orientation: "horizontal"
+            
+            ScrollView:
+                size_hint: 0.5, 1
+                List:
+                    orientation: "vertical"
+                    size_hint: 1, None
+                    height: self.minimum_height
+                Button:
+                    text: "search"
+            BoxLayout:
+                orientation: "vertical"
+                Button:
+                    background_color: 0.7, 0.7, 0.7, 1
+                    text: "2"
+                BoxLayout:
+                    size_hint: 1, 0.2
+                    Button:
+                        text: "sub1" 
+                    Button:
+                        text: "sub2" 
                 
 <MainWidget>:
     Button:
