@@ -1,61 +1,57 @@
 BoxlayoutEx:
 
-<WidgetEx>:
-    cols: 3
-    Button:
-        text: "Click"
-        on_press: root.buttonPress()
-        font_name: "fonts/zh-cn.ttf"
-        font_size: "20dp"
-    Label:
-        text: root.my_text
-        font_name: "fonts/zh-cn.ttf"
-        font_size: "20dp"
-
-
 <BoxlayoutEx>:
     BoxLayout:
         orientation: "vertical"
         BoxLayout:
             size_hint: 1, 0.08
             Button:
-                text: "skoleni"
+                text: "Skolēnu saraksts"
                 
             Button:
-                text:"abmul"
+                text:"Ambulatorais Žurnāls"
             Button:
-                text: ""
+                text:"..."#papildus iestatijumi
                 size_hint: 0.15, 1
                    
         BoxLayout:
             orientation: "horizontal"
             
-            ScrollView:
+            BoxLayout:
+                orientation: "vertical"
                 size_hint: 0.5, 1
-                List:
-                    orientation: "vertical"
-                    size_hint: 1, None
-                    height: self.minimum_height
+                ScrollView:
+                    List:#saraksts ar skoleniem py failā
+                        orientation: "vertical"
+                        size_hint: 1, None
+                        height: self.minimum_height
+                Button:
+                    text:"Meklēt"
+                    size_hint: 1, 0.1
                 
             BoxLayout:
                 orientation: "vertical"
-                Button:
-                    background_color: 0.7, 0.7, 0.7, 1
-                    text: "2"
                 BoxLayout:
-                    size_hint: 1, 0.2
+                    orientation: "vertical"
+                    BoxLayout:
+                        orientation: "horizontal"
+                        size_hint: 1, 0.5
+                        Button:
+                            background_color: 0.7, 0.7, 0.7, 1
+                            text: "Info par skolenu"
+                        BoxLayout:
+                            orientation: "vertical"
+                            size_hint: 0.117, 1
+                            Button:
+                                text: "Redeģēt"
+                            Button:
+                                text: "Dzēst"
                     Button:
-                        text: "sub1" 
+                        background_color: 0.7, 0.7, 0.7, 1
+                        text: "Iepriekšējie ieraksti"
+                BoxLayout:
+                    size_hint: 1, 0.1
                     Button:
-                        text: "sub2" 
-                
-<MainWidget>:
-    Button:
-        background_color: .34, .67, .13, 1
-        text: "Hello"
-        size: "80dp", "80dp"
-        pos: "300dp", "200dp"
-    Label:
-        text: "Sveiki"
-        size: "80dp", "80dp"
-        pos: "400dp", "200dp"
+                        text: "Dzēst izvēlēto ierakstu"
+                    Button:
+                        text: "Jauns ieraksts" 
