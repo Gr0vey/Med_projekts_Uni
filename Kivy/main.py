@@ -34,5 +34,4 @@ class BoxlayoutEx(BoxLayout):
 class Aplikacija(App):
     pass
 
-
 Aplikacija().run()
