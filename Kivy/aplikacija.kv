@@ -36,9 +36,20 @@ BoxlayoutEx:
                     BoxLayout:
                         orientation: "horizontal"
                         size_hint: 1, 0.5
-                        Button:
-                            background_color: 0.7, 0.7, 0.7, 1
-                            text: "Info par skolenu"
+                        BoxLayout:#Logs informācijai par skolēnu
+                            orientation:"horizontal" #Logs informācijai par skolēnu
+                            Label:
+                                text: "Vards\nUzvards"
+                            Label:
+                                text: "Klase"
+                            Label:
+                                text: "Pk"
+                            Label:
+                                text: "Dzimšanas\nDati"
+                            Label:
+                                text: "Pk"
+                            Label:
+                                text: "Pk"
                         BoxLayout:
                             orientation: "vertical"
                             size_hint: 0.117, 1
