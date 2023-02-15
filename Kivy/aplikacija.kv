@@ -19,15 +19,21 @@ BoxlayoutEx:
             
             BoxLayout:
                 orientation: "vertical"
-                size_hint: 0.5, 1
+                width: 60
+                #size_hint: 0.5, 1
                 ScrollView:
                     List:#saraksts ar skoleniem py failā
                         orientation: "vertical"
                         size_hint: 1, None
                         height: self.minimum_height
-                Button:
-                    text:"Meklēt"
+                BoxLayout:
+                    orientation: "horizontal"
                     size_hint: 1, 0.1
+                    TextInput:
+                        text: ""
+                        size_hint: 2, 1
+                    Button:
+                        text:"Meklēt"
                 
             BoxLayout:
                 orientation: "vertical"
@@ -39,24 +45,28 @@ BoxlayoutEx:
                         BoxLayout:#Logs informācijai par skolēnu
                             orientation:"horizontal" #Logs informācijai par skolēnu
                             Label:
-                                text: "Vards\nUzvards"
-                            Label:
                                 text: "Klase"
                             Label:
-                                text: "Pk"
-                            Label:
-                                text: "Dzimšanas\nDati"
+                                text: "Vards\nUzvards"
                             Label:
                                 text: "Pk"
                             Label:
-                                text: "Pk"
+                                text: "Dzimšanas\ndati"
+                            Label:
+                                text: "Telefona\nnumurs"
+                            Label:
+                                text: "Med\nkarte"
+                            Label:
+                                text: "Hroniskās\nslimības"
+                            Label:
+                                text: "Trukstošās\nVakcīnas"
                         BoxLayout:
                             orientation: "vertical"
                             size_hint: 0.117, 1
                             Button:
                                 text: "Redeģēt"
                             Button:
-                                text: "Dzēst"
+                                text: "Arhivēt"
                     Button:
                         background_color: 0.7, 0.7, 0.7, 1
                         text: "Iepriekšējie ieraksti"
