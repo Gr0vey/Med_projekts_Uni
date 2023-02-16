@@ -16,7 +16,7 @@ Config.set('input', 'mouse', 'mouse,disable_multitouch') #multitouch atslēgšan
 kivy.require("2.0.0")
 
 with db.connect('datubaze.db') as con:
-    cur = con.execute("""SELECT * FROM skolenu_saraksts
+    cur = con.execute("""SELECT * FROM skolenu_saraksts ORDER BY klase, klases_burts, vards_uzvards
     """)
     skoleni = cur.fetchall()
     #izveletais_skolens = skoleni[0][0]
@@ -26,9 +26,9 @@ class List(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         for i in skoleni:
-            if i[9] == 1:
+            if i[10] == 1:
                 self.add_widget(Button(
-                        text=f'{i[1]} - {i[2]}',
+                        text=f'{i[1]}.{i[2]} - {i[3]}',
                         text_size= (200,None),    
                         halign= 'left',
                         valign= 'bottom',
@@ -41,7 +41,7 @@ def set_variables(skolena_id,a):
     print(skolena_id)
                 
 class BoxlayoutEx(BoxLayout):
-    pass
+    klase = StringProperty('')
 class Aplikacija(App):
     pass
 
