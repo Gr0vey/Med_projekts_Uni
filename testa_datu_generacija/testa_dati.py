@@ -8,7 +8,7 @@ m_lastnames_file = r'testa_datu_generacija\dati_testam_u_zeni.txt'
 slimibas_file = r'testa_datu_generacija\dati_hroni_slim.txt'
 vakcinas_file = r'testa_datu_generacija\dati_vakcinas.txt'
 
-datu_baze = r'C:\Users\Skolnieks17.5VSK-12380356-K\Documents\GitHub\Med_projekts\datubaze.db'
+datu_baze = r'C:\Users\aleks\Documents\GitHub\Med_projekts\datubaze.db'
 
 def file_to_array(file_name):
     with open(file_name,'r',encoding='utf-8') as file:
@@ -80,5 +80,5 @@ with db.connect(datu_baze) as con:
     for i in range(1,13):
         for j in range(0,random.randrange(2,5)):
             for k in range(0,27):
-                cur = con.execute("""INSERT INTO skolenu_saraksts (klase, klases_burts, vards_uzvards ,pk ,dz_dati, tel_nr, med_karte, hroniskas_sl, trukst_vakc) VALUES(?,?,?,?,?,?,?,?,?)
-                """,(i,burti[j],generate_name(),generate_pk(i),generate_datums(i),generate_tel(),generate_medkarte(),generate_slimibas(),generate_vakc()))
+                cur = con.execute("""INSERT INTO skolenu_saraksts (klase, klases_burts, vards_uzvards ,pk ,dz_dati, tel_nr, med_karte, hroniskas_sl, trukst_vakc, arhiv) VALUES(?,?,?,?,?,?,?,?,?,?)
+                """,(i,burti[j],generate_name(),generate_pk(i),generate_datums(i),generate_tel(),generate_medkarte(),generate_slimibas(),generate_vakc(),1))

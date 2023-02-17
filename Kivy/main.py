@@ -33,7 +33,7 @@ class List(BoxLayout):
                         halign= 'left',
                         valign= 'bottom',
                         size_hint=(1,None),
-                        size=(dp(20),dp(20)),
+                        size=(dp(20),dp(25)),
                         on_press= partial(set_variables,i[0])
                         ))
                 
@@ -41,7 +41,7 @@ def set_variables(skolena_id,a):
     print(skolena_id)
                 
 class BoxlayoutEx(BoxLayout):
-    klase = StringProperty('')
+    pass
 class Aplikacija(App):
     pass
 
