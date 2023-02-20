@@ -21,27 +21,38 @@ with db.connect('datubaze.db') as con:
     skoleni = cur.fetchall()
     #izveletais_skolens = skoleni[0][0]
     #print(izveletais_skolens)
-
-class List(BoxLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        for i in skoleni:
-            if i[10] == 1:
-                self.add_widget(Button(
-                        text=f'{i[1]}.{i[2]} - {i[3]}',
-                        text_size= (200,None),    
-                        halign= 'left',
-                        valign= 'bottom',
-                        size_hint=(1,None),
-                        size=(dp(20),dp(25)),
-                        on_press= partial(set_variables,i[0])
-                        ))
-                
-def set_variables(skolena_id,a):
-    print(skolena_id)
-                
 class BoxlayoutEx(BoxLayout):
-    pass
+    klase = StringProperty()
+    def set_variables(skolena_id,stash):
+        with db.connect('datubaze.db') as con:
+            cur = con.execute(f"""SELECT * FROM skolenu_saraksts where skolena_id = {skolena_id}
+            """)
+            skolnieks = cur.fetchone()
+            
+            print(skolnieks)
+        print(BoxlayoutEx.klase)
+        BoxlayoutEx.klase = '{}.{}'.format(skolnieks[1],skolnieks[2])
+
+    class List(BoxLayout):
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            for i in skoleni:
+                if i[10] == 1:
+                    self.add_widget(Button(
+                            text=f'{i[1]}.{i[2]} - {i[3]}',
+                            text_size= (200,None),    
+                            halign= 'left',
+                            valign= 'bottom',
+                            size_hint=(1,None),
+                            size=(dp(20),dp(25)),
+                            on_press= partial(BoxlayoutEx.set_variables,i[0])
+                            ))
+#partial(set_variables,i[0])
+#def set_variables(skolena_id,a):
+#    print(skolena_id)
+
+    #def set_variables(self,id):
+    #    print(skolena_id)
 class Aplikacija(App):
     pass
 
