@@ -24,7 +24,7 @@ with db.connect('datubaze.db') as con:
     #print(izveletais_skolens)
 class BoxlayoutEx(BoxLayout):
     pass
-    
+
 class List(BoxLayout):
     klase = StringProperty('--klase--')
     def __init__(self, **kwargs):
@@ -38,17 +38,17 @@ class List(BoxLayout):
                         valign= 'bottom',
                         size_hint=(1,None),
                         size=(dp(20),dp(25)),
-                        on_press= partial(self.set_variables,i[0])
+                        on_press=  self.set_variable(i[0])
                         ))
-    def set_variables(self,skolena_id,stash):
+
+    def set_variable(self,id):
         with db.connect('datubaze.db') as con:
-            cur = con.execute(f"""SELECT * FROM skolenu_saraksts WHERE skolena_id = {skolena_id}""")
+            cur = con.execute(f"""SELECT * FROM skolenu_saraksts WHERE skolena_id = {id}""")
             skolnieks = cur.fetchone()           
             print(skolnieks)
-        self.klase = skolnieks[2]
+        klase = skolnieks[2]
         print(self.klase)
-        
-        
+          
         #BoxlayoutEx.klase = '{}.{}'.format(skolnieks[1],skolnieks[2])
 #partial(set_variables,i[0])
 #def set_variables(skolena_id,a):
@@ -57,6 +57,6 @@ class List(BoxLayout):
     #def set_variables(self,id):
     #    print(skolena_id)
 class Aplikacija(App):
-    klase = StringProperty('-klase-')
+    pass
 
 Aplikacija().run()
