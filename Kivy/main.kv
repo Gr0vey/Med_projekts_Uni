@@ -1,6 +1,31 @@
-BoxlayoutEx:
+WindowManager:
+    LoginScreen:
+    MainScreen:
+    AmbulatoraisZurnals:
 
-<BoxlayoutEx>:
+<LoginScreen>:
+    name: "login"
+
+    GridLayout:
+        cols:1
+
+        GridLayout:
+            cols: 2
+
+            Label:
+                text: "Password: "
+
+            TextInput:
+                id: passw
+                multiline: False
+
+        Button:
+            text: "Submit"
+            on_press:
+                app.root.current = "main"
+                root.manager.transition.direction = "left"
+<MainScreen>:
+    name: 'main'
     BoxLayout:
         orientation: "vertical"
         BoxLayout:
@@ -10,6 +35,9 @@ BoxlayoutEx:
                 
             Button:
                 text:"Ambulatorais Žurnāls"
+                on_release:
+                    app.root.current = "zurnals"
+                    root.manager.transition.direction = "left"
             Button:
                 text:"..."#papildus iestatijumi
                 size_hint: 0.15, 1
@@ -45,7 +73,7 @@ BoxlayoutEx:
                         BoxLayout:#Logs informācijai par skolēnu
                             orientation:"horizontal" #Logs informācijai par skolēnu
                             Label:
-                                text: 'root.self.klase'
+                                text: root.klase
                             Label:
                                 text: "Vards\nUzvards"
                             Label:
@@ -59,7 +87,7 @@ BoxlayoutEx:
                             Label:
                                 text: "Hroniskās\nslimības"
                             Label:
-                                text: "Trukstošās\nVakcīnas"
+                                text: "-"
                         BoxLayout:
                             orientation: "vertical"
                             size_hint: 0.117, 1
@@ -75,4 +103,23 @@ BoxlayoutEx:
                     Button:
                         text: "Dzēst izvēlēto ierakstu"
                     Button:
-                        text: "Jauns ieraksts" 
+                        text: "Jauns ieraksts"
+
+<AmbulatoraisZurnals>:
+    name: 'zurnals'
+    BoxLayout:
+        orientation: "vertical"
+        BoxLayout:
+            size_hint: 1, 0.08
+            Button:
+                text: "Skolēnu saraksts"
+                on_release:
+                    app.root.current = "main"
+                    root.manager.transition.direction = "right"
+            Button:
+                text:"Ambulatorais Žurnāls"
+            Button:
+                text:"..."#papildus iestatijumi
+                size_hint: 0.15, 1
+        Label:
+            text: '--Content--'

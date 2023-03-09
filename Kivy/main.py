@@ -1,4 +1,5 @@
 from kivy.app import App
+from kivy.lang import Builder
 from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
@@ -9,12 +10,26 @@ from kivy.properties import StringProperty
 import sqlite3 as db
 import kivy
 from kivy.config import Config
+from kivy.uix.screenmanager import ScreenManager, Screen
 
 from functools import partial
 
 Config.set('input', 'mouse', 'mouse,disable_multitouch') #multitouch atslēgšana
 kivy.require("2.0.0")
 
+
+
+class LoginScreen(Screen):
+    pass
+
+class MainScreen(Screen):
+    klase = StringProperty('--klase--')
+
+class AmbulatoraisZurnals(Screen):
+    pass
+
+class WindowManager(ScreenManager):
+    pass
 
 with db.connect('datubaze.db') as con:
     cur = con.execute("""SELECT * FROM skolenu_saraksts ORDER BY klase, klases_burts, vards_uzvards
@@ -23,7 +38,14 @@ with db.connect('datubaze.db') as con:
     #izveletais_skolens = skoleni[0][0]
     #print(izveletais_skolens)
 class BoxlayoutEx(BoxLayout):
-    pass
+    klase = StringProperty('--klase--')
+    def set_variable():
+        with db.connect('datubaze.db') as con:
+            cur = con.execute(f"""SELECT * FROM skolenu_saraksts WHERE skolena_id = {id}""")
+            skolnieks = cur.fetchone()           
+            print(skolnieks)
+        klase = StringProperty(skolnieks[2]) #.\python.exe -m pip install sqlcipher3
+        print()
 
 class List(BoxLayout):
     klase = StringProperty('--klase--')
@@ -37,8 +59,8 @@ class List(BoxLayout):
                         halign= 'left',
                         valign= 'bottom',
                         size_hint=(1,None),
-                        size=(dp(20),dp(25)),
-                        on_press=  self.set_variable(i[0])
+                        size=(dp(20),dp(25))#,
+                        #on_press=  partial(self.set_variable,1[0])
                         ))
 
     def set_variable(self,id):
@@ -56,7 +78,12 @@ class List(BoxLayout):
 
     #def set_variables(self,id):
     #    print(skolena_id)
-class Aplikacija(App):
-    pass
+kv = Builder.load_file("main.kv")
 
-Aplikacija().run()
+
+class MyMainApp(App):
+    def build(self):
+        return kv
+    
+if __name__ == "__main__":
+    MyMainApp().run()
