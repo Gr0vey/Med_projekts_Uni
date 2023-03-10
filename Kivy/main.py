@@ -6,7 +6,7 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.metrics import dp
-from kivy.properties import StringProperty
+from kivy.properties import StringProperty, ObjectProperty
 import sqlite3 as db
 import kivy
 from kivy.config import Config
@@ -17,13 +17,14 @@ from functools import partial
 Config.set('input', 'mouse', 'mouse,disable_multitouch') #multitouch atslēgšana
 kivy.require("2.0.0")
 
-
-
+#with db.connect('datubaze.db') as con:
+#    cur = con.execute("""SELECT * FROM """)
 class LoginScreen(Screen):
-    pass
-
+    def verify_credentials(self):
+        if self.ids["login"].text == "admin" and self.ids["passw"].text == "admin":
+            self.manager.current = "main"
 class MainScreen(Screen):
-    klase = StringProperty('--klase--')
+    klase = StringProperty('Klase')
 
 class AmbulatoraisZurnals(Screen):
     pass

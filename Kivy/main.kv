@@ -13,6 +13,13 @@ WindowManager:
             cols: 2
 
             Label:
+                text: "Login: "
+
+            TextInput:
+                id: login
+                multiline: False
+            
+            Label:
                 text: "Password: "
 
             TextInput:
@@ -21,9 +28,7 @@ WindowManager:
 
         Button:
             text: "Submit"
-            on_press:
-                app.root.current = "main"
-                root.manager.transition.direction = "left"
+            on_release: root.verify_credentials()
 <MainScreen>:
     name: 'main'
     BoxLayout:
@@ -69,7 +74,7 @@ WindowManager:
                     orientation: "vertical"
                     BoxLayout:
                         orientation: "horizontal"
-                        size_hint: 1, 0.5
+                        size_hint: 1, 0.2
                         BoxLayout:#Logs informācijai par skolēnu
                             orientation:"horizontal" #Logs informācijai par skolēnu
                             Label:
@@ -86,18 +91,20 @@ WindowManager:
                                 text: "Med\nkarte"
                             Label:
                                 text: "Hroniskās\nslimības"
-                            Label:
-                                text: "-"
                         BoxLayout:
                             orientation: "vertical"
                             size_hint: 0.117, 1
                             Button:
-                                text: "Redeģēt"
+                                text: "Rediģēt"
                             Button:
                                 text: "Arhivēt"
                     Button:
+                        size_hint: 1, 0.5
                         background_color: 0.7, 0.7, 0.7, 1
-                        text: "Iepriekšējie ieraksti"
+                        text: "Izvēlētais ieraksts"
+                    Button:
+                        background_color: 0.7, 0.7, 0.7, 1
+                        text: "Citi skolēna ieraksti"
                 BoxLayout:
                     size_hint: 1, 0.1
                     Button:
