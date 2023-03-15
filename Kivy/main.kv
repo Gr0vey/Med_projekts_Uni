@@ -69,49 +69,63 @@ WindowManager:
                         text:"Meklēt"
                 
             BoxLayout:
-                orientation: "vertical"
+                orientation: "horizontal"
                 BoxLayout:
                     orientation: "vertical"
                     BoxLayout:
-                        orientation: "horizontal"
-                        size_hint: 1, 0.2
-                        BoxLayout:#Logs informācijai par skolēnu
-                            orientation:"horizontal" #Logs informācijai par skolēnu
-                            Label:
-                                text: root.klase
-                            Label:
-                                text: "Vards\nUzvards"
-                            Label:
-                                text: "Pk"
-                            Label:
-                                text: "Dzimšanas\ndati"
-                            Label:
-                                text: "Telefona\nnumurs"
-                            Label:
-                                text: "Med\nkarte"
-                            Label:
-                                text: "Hroniskās\nslimības"
-                        BoxLayout:
-                            orientation: "vertical"
-                            size_hint: 0.117, 1
-                            Button:
-                                text: "Rediģēt"
-                            Button:
-                                text: "Arhivēt"
-                    Button:
-                        size_hint: 1, 0.5
-                        background_color: 0.7, 0.7, 0.7, 1
-                        text: "Izvēlētais ieraksts"
-                    Button:
-                        background_color: 0.7, 0.7, 0.7, 1
-                        text: "Citi skolēna ieraksti"
+                        orientation: "vertical"
+                        Button:
+                            size_hint: 1, 0.5
+                            background_color: 0.7, 0.7, 0.7, 1
+                            text: "Izvēlētais ieraksts"
+                        Button:
+                            background_color: 0.7, 0.7, 0.7, 1
+                            text: "Citi skolēna ieraksti"
+                    BoxLayout:
+                        size_hint: 1, 0.1
+                        Button:
+                            text: "Dzēst izvēlēto ierakstu"
+                        Button:
+                            text: "Jauns ieraksts"
                 BoxLayout:
-                    size_hint: 1, 0.1
-                    Button:
-                        text: "Dzēst izvēlēto ierakstu"
-                    Button:
-                        text: "Jauns ieraksts"
-
+                    orientation: "vertical"
+                    size_hint: None, 1
+                    size: 200, 0
+                    BoxLayout:#Logs informācijai par skolēnu
+                        orientation:"vertical" #Logs informācijai par skolēnu
+                        Label:
+                            id: klase
+                            text: root.klase
+                            halign: 'left'
+                        Label:
+                            id: vards
+                            text: root.vards
+                        Label:
+                            id: pk
+                            text: root.pk
+                        Label:
+                            id: dzimsanas_d
+                            text: root.dzimsanas_d
+                        Label:
+                            id: tel
+                            text: root.tel
+                        Label:
+                            id: med
+                            text: root.med
+                        Label:
+                            id: slimibas
+                            text: root.slimibas
+                        Label:
+                            id: piezimes
+                            size_hint: 1, 10
+                            text: root.piezimes
+                    BoxLayout:
+                        orientation: "horizontal"
+                        size_hint: 1, 0.1
+                        Button:
+                            text: "Rediģēt"
+                        Button:
+                            text: "Arhivēt"
 <AmbulatoraisZurnals>:
     name: 'zurnals'
     BoxLayout:

@@ -21,10 +21,18 @@ kivy.require("2.0.0")
 #    cur = con.execute("""SELECT * FROM """)
 class LoginScreen(Screen):
     def verify_credentials(self):
-        if self.ids["login"].text == "admin" and self.ids["passw"].text == "admin":
+        if self.ids["login"].text == "" and self.ids["passw"].text == "":
             self.manager.current = "main"
+            
 class MainScreen(Screen):
-    klase = StringProperty('Klase')
+    klase = StringProperty('Klase:\n')
+    vards = StringProperty('Vards Uzvards:\n')
+    pk = StringProperty('Personas kods:\n')
+    dzimsanas_d = StringProperty('Dzimšanas dati:\n')
+    tel = StringProperty('Telefona nummurs:\n')
+    med = StringProperty('Med. karte:\n')
+    slimibas = StringProperty('Hroniskās slimības:\n')
+    piezimes = StringProperty('Piezīmes:\n')
 
 class AmbulatoraisZurnals(Screen):
     pass
@@ -60,25 +68,22 @@ class List(BoxLayout):
                         halign= 'left',
                         valign= 'bottom',
                         size_hint=(1,None),
-                        size=(dp(20),dp(25))#,
-                        #on_press=  partial(self.set_variable,1[0])
+                        size=(dp(20),dp(25)),
+                        on_press=  partial(self.set_variable,i[0])
                         ))
-
-    def set_variable(self,id):
+        
+    def set_variable(self,id,button): # Metode, kura atbild par to lai informācija par skolēnu nomainās uz ekrāna
         with db.connect('datubaze.db') as con:
             cur = con.execute(f"""SELECT * FROM skolenu_saraksts WHERE skolena_id = {id}""")
-            skolnieks = cur.fetchone()           
-            print(skolnieks)
-        klase = skolnieks[2]
-        print(self.klase)
+            skolnieks = cur.fetchone()            
+            self.parent.parent.parent.parent.parent.ids.klase.text = f'{skolnieks[1]}.{skolnieks[2]}' # klases nummurs
+            self.parent.parent.parent.parent.parent.ids.vards.text = f'{skolnieks[3]}' # vards uzvards
+            self.parent.parent.parent.parent.parent.ids.pk.text = f'{skolnieks[4]}' # personas kods
+            self.parent.parent.parent.parent.parent.ids.dzimsanas_d.text = f'{skolnieks[5]}' # dzimšanas dati
+            self.parent.parent.parent.parent.parent.ids.tel.text = f'{skolnieks[6]}' # telefons
+            self.parent.parent.parent.parent.parent.ids.med.text = f'{skolnieks[7]}' # med karte
+            self.parent.parent.parent.parent.parent.ids.slimibas.text = f'{skolnieks[8]}' # hroniskās slimības
           
-        #BoxlayoutEx.klase = '{}.{}'.format(skolnieks[1],skolnieks[2])
-#partial(set_variables,i[0])
-#def set_variables(skolena_id,a):
-#    print(skolena_id)
-
-    #def set_variables(self,id):
-    #    print(skolena_id)
 kv = Builder.load_file("main.kv")
 
 
