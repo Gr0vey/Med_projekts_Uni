@@ -78,9 +78,11 @@ WindowManager:
                             size_hint: 1, 0.5
                             background_color: 0.7, 0.7, 0.7, 1
                             text: "Izvēlētais ieraksts"
-                        Button:
-                            background_color: 0.7, 0.7, 0.7, 1
-                            text: "Citi skolēna ieraksti"
+                        ScrollView:
+                            Ieraksti:
+                                orientation: "vertical"
+                                size_hint: 1, None
+                                height: self.minimum_height
                     BoxLayout:
                         size_hint: 1, 0.1
                         Button:

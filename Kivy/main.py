@@ -47,17 +47,26 @@ with db.connect('datubaze.db') as con:
     #izveletais_skolens = skoleni[0][0]
     #print(izveletais_skolens)
 class BoxlayoutEx(BoxLayout):
-    klase = StringProperty('--klase--')
-    def set_variable():
-        with db.connect('datubaze.db') as con:
-            cur = con.execute(f"""SELECT * FROM skolenu_saraksts WHERE skolena_id = {id}""")
-            skolnieks = cur.fetchone()           
-            print(skolnieks)
-        klase = StringProperty(skolnieks[2]) #.\python.exe -m pip install sqlcipher3
-        print()
+    pass
 
+class Ieraksti(BoxLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+    def get_content(self,skolena_id):
+        with db.connect('datubaze.db') as con:
+            cur = con.execute(f"""SELECT * FROM ambulatorais_zurnals WHERE skolena_id = {946}""")
+            ieraksti = cur.fetchall()
+            for i in ieraksti:
+                self.add_widget(Button(
+                    text=f'{i}',
+                    text_size= (200,None),    
+                    halign= 'left',
+                    valign= 'bottom',
+                    size_hint=(1,None),
+                    size=(dp(20),dp(60))
+                ))
+            
 class List(BoxLayout):
-    klase = StringProperty('--klase--')
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         for i in skoleni:
@@ -71,8 +80,8 @@ class List(BoxLayout):
                         size=(dp(20),dp(25)),
                         on_press=  partial(self.set_variable,i[0])
                         ))
-        
     def set_variable(self,id,button): # Metode, kura atbild par to lai informācija par skolēnu nomainās uz ekrāna
+        #=========================================================================================================# Skolena info
         with db.connect('datubaze.db') as con:
             cur = con.execute(f"""SELECT * FROM skolenu_saraksts WHERE skolena_id = {id}""")
             skolnieks = cur.fetchone()            
@@ -83,6 +92,11 @@ class List(BoxLayout):
             self.parent.parent.parent.parent.parent.ids.tel.text = f'{skolnieks[6]}' # telefons
             self.parent.parent.parent.parent.parent.ids.med.text = f'{skolnieks[7]}' # med karte
             self.parent.parent.parent.parent.parent.ids.slimibas.text = f'{skolnieks[8]}' # hroniskās slimības
+        #=========================================================================================================#
+
+        #=========================================================================================================# Ierakstu info
+        
+        #=========================================================================================================#
           
 kv = Builder.load_file("main.kv")
 
@@ -90,6 +104,6 @@ kv = Builder.load_file("main.kv")
 class MyMainApp(App):
     def build(self):
         return kv
-    
+
 if __name__ == "__main__":
     MyMainApp().run()
