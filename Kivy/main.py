@@ -11,11 +11,14 @@ import sqlite3 as db
 import kivy
 from kivy.config import Config
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.core.window import Window
+from kivy.graphics import Color, RoundedRectangle
 
 from functools import partial
 
 Config.set('input', 'mouse', 'mouse,disable_multitouch') #multitouch atslēgšana
 kivy.require("2.0.0")
+Window.clearcolor = (0.7, 0.7, 0.8, 1)
 
 #with db.connect('datubaze.db') as con:
 #    cur = con.execute("""SELECT * FROM """)
@@ -52,7 +55,7 @@ class BoxlayoutEx(BoxLayout):
 class Ieraksti(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-    def get_content(self,skolena_id):
+    #def get_content(self,skolena_id):
         with db.connect('datubaze.db') as con:
             cur = con.execute(f"""SELECT * FROM ambulatorais_zurnals WHERE skolena_id = {946}""")
             ieraksti = cur.fetchall()
@@ -63,7 +66,8 @@ class Ieraksti(BoxLayout):
                     halign= 'left',
                     valign= 'bottom',
                     size_hint=(1,None),
-                    size=(dp(20),dp(60))
+                    size=(dp(20),dp(60)),
+                    color=(0,0,0,1)
                 ))
             
 class List(BoxLayout):
@@ -78,7 +82,10 @@ class List(BoxLayout):
                         valign= 'bottom',
                         size_hint=(1,None),
                         size=(dp(20),dp(25)),
-                        on_press=  partial(self.set_variable,i[0])
+                        on_press=  partial(self.set_variable,i[0]),
+                        background_color =(1, 1, 1, 1),
+                        color=(0,0,0,1),
+                        background_normal="button.png"
                         ))
     def set_variable(self,id,button): # Metode, kura atbild par to lai informācija par skolēnu nomainās uz ekrāna
         #=========================================================================================================# Skolena info
