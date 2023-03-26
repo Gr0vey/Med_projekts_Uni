@@ -1,34 +1,36 @@
+import kivy
 from kivy.app import App
-from kivy.uix.label import Label
+from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
+from kivy.graphics import Color, RoundedRectangle
 
-class MyLabel(Label):
+class RoundedButton(Button):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.text = 'Original Text'
-    
-    def change_label(self, new_text):
-        self.text = new_text
+        with self.canvas.before:
+            Color(0, 1, 0, 1)
+            self.corner = RoundedRectangle(pos=self.pos, size=self.size, radius=[10,])
+        self.bind(pos=self.update_canvas)
+        self.bind(size=self.update_canvas)
 
-class MyBoxLayout(BoxLayout):
+    def update_canvas(self, *args):
+        self.corner.pos = self.pos
+        self.corner.size = self.size
+
+class RoundedBoxLayout(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.mylabel = MyLabel()
-        self.add_widget(self.mylabel)
-
-def update_label(a):
-    mylabel.change_label(str(a))
+        self.orientation = "vertical"
+        self.spacing = 10
+        self.padding = 10
+        for i in range(5):
+            button = RoundedButton(text=f"Button {i}",background_normal="",background_color=(0,0,0,0))
+            self.add_widget(button)
 
 class MyApp(App):
     def build(self):
-        global mylabel
-        mylayout = MyBoxLayout()
-        mylabel = mylayout.mylabel
-        return mylayout
-    
-for i in range (10):
-    update_label(i)
-    input()
+        return RoundedBoxLayout()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     MyApp().run()
+

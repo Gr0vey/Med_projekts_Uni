@@ -14,6 +14,11 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.core.window import Window
 from kivy.graphics import Color, RoundedRectangle
 
+import time
+from kivymd.app import MDApp
+from kivymd.uix.button import MDRaisedButton
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.behaviors import CircularRippleBehavior
 
 from functools import partial
 
@@ -23,13 +28,15 @@ kivy.require("2.0.0")
 
 #===============================# Colors #===============================#
 
-primaryWhite = (246/255, 244/255, 246/255, 1)   #F6F4F6
-secondaryWhite = (240/255, 228/255, 241/255, 1) #F0E4F1
-black = (86/255, 85/255, 84/255, 1)             #565554
+primaryWhite = (250/255, 250/255, 255/255, 1)   #FAFAFF
+secondaryWhite = (223/255, 223/255, 230/255, 1) #DFDFE6
+black = (48/255, 52/255, 63/255, 1)             #30343F
 textBlack = (41/225, 41/225, 40/255, 1)         #292928
-accent = (238/255, 184/255, 104/255, 1)         #EEB868
+accent1 = (17/255, 138/255, 178/255, 1)         #118AB2
+accent2 = (239/255, 71/255, 111/255, 1)         #EF476F
+accent3 = (6/255, 214/255, 160/255, 1)          #06D6A0
 
-Window.clearcolor = secondaryWhite # App background
+Window.clearcolor = secondaryWhite
 #===============================# Colors #===============================#
 
 class LoginScreen(Screen):
@@ -77,29 +84,62 @@ class Ieraksti(BoxLayout):
                     valign= 'bottom',
                     size_hint=(1,None),
                     size=(dp(20),dp(60)),
-                    background_color = primaryWhite,#Color of the button
+                    background_color = (0,0,0,0),#Color of the button
                     color= textBlack,#Text color
                     background_normal=""
                 ))
-            
-class List(BoxLayout):
+                
+class RoundedButton(Button):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        with self.canvas.before:
+            Color(primaryWhite)
+            self.corner = RoundedRectangle(pos=self.pos, size=self.size, radius=[5,])
+        self.bind(pos=self.update_canvas)
+        self.bind(size=self.update_canvas)
+        
+    def on_press(self):
+        self.canvas.before.clear()
+        with self.canvas.before:
+            Color(secondaryWhite)
+            self.corner = RoundedRectangle(pos=self.pos, size=self.size, radius=[5,])
+        super().on_press()
+        
+    def on_release(self):
+        self.canvas.before.clear()
+        with self.canvas.before:
+            Color(primaryWhite)
+            self.corner = RoundedRectangle(pos=self.pos, size=self.size, radius=[5,])
+            
+            
+    def update_canvas(self, *args):
+        Color(primaryWhite)
+        self.corner.pos = self.pos
+        self.corner.size = self.size
+
+         
+class List(BoxLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)   
+        self.spacing = 1
+        self.padding = 1
         for i in skoleni:
-            if i[10] == 1:
-                self.add_widget(Button(
+            if i[10] == 1:#Parbaude vai skolnieks ir arhivēts
+                button = RoundedButton(
                         text=f'{i[1]}.{i[2]} - {i[3]}',
                         text_size= (200,None),    
                         halign= 'left',
                         valign= 'bottom',
                         size_hint=(1,None),
-                        size=(dp(20),dp(35)),
+                        size=(dp(20),dp(40)),
                         on_press=  partial(self.set_variable,i[0]),
-                        background_color = primaryWhite,#Color of the button
+                        background_color = (0,0,0,0),#Color of the button
                         color= textBlack,#Text color
                         background_normal=""
-                        ))
-    def set_variable(self,id,button): # Metode, kura atbild par to lai informācija par skolēnu nomainās uz ekrāna
+                        )
+                self.add_widget(button)
+                
+    def set_variable(self,id,button_object): # Metode, kura atbild par to lai informācija par skolēnu nomainās uz ekrāna
         #=========================================================================================================# Skolena info
         with db.connect('datubaze.db') as con:
             cur = con.execute(f"""SELECT * FROM skolenu_saraksts WHERE skolena_id = {id}""")
