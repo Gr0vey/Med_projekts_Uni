@@ -1,26 +1,24 @@
-BoxLayout:
-                        orientation: "horizontal"
-                        size_hint: 1, 0.2
-                        BoxLayout:#Logs informācijai par skolēnu
-                            orientation:"horizontal" #Logs informācijai par skolēnu
-                            Label:
-                                text: root.klase
-                            Label:
-                                text: "Vards\nUzvards"
-                            Label:
-                                text: "Pk"
-                            Label:
-                                text: "Dzimšanas\ndati"
-                            Label:
-                                text: "Telefona\nnumurs"
-                            Label:
-                                text: "Med\nkarte"
-                            Label:
-                                text: "Hroniskās\nslimības"
-                        BoxLayout:
-                            orientation: "vertical"
-                            size_hint: 0.117, 1
-                            Button:
-                                text: "Rediģēt"
-                            Button:
-                                text: "Arhivēt"
+<LoginScreen>:
+    size_hint: None, None
+    size: 300, 200
+    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+    BoxLayout:
+        spacing: 20
+        padding: 20
+
+        TextInput:
+            id: username_input
+            hint_text: 'Username'
+            multiline: False
+
+        TextInput:
+            id: password_input
+            hint_text: 'Password'
+            password: True
+            multiline: False
+
+        Button:
+            id: login_button
+            text: 'Access'
+            on_press: root.login()

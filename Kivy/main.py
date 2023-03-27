@@ -14,12 +14,6 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.core.window import Window
 from kivy.graphics import Color, RoundedRectangle
 
-import time
-from kivymd.app import MDApp
-from kivymd.uix.button import MDRaisedButton
-from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.behaviors import CircularRippleBehavior
-
 from functools import partial
 
 Config.set('input', 'mouse', 'mouse,disable_multitouch') #multitouch atslēgšana
@@ -93,27 +87,15 @@ class RoundedButton(Button):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         with self.canvas.before:
-            Color(primaryWhite)
+            global black
+            Color(rgba=primaryWhite)
             self.corner = RoundedRectangle(pos=self.pos, size=self.size, radius=[5,])
         self.bind(pos=self.update_canvas)
         self.bind(size=self.update_canvas)
-        
-    def on_press(self):
-        self.canvas.before.clear()
-        with self.canvas.before:
-            Color(secondaryWhite)
-            self.corner = RoundedRectangle(pos=self.pos, size=self.size, radius=[5,])
-        super().on_press()
-        
-    def on_release(self):
-        self.canvas.before.clear()
-        with self.canvas.before:
-            Color(primaryWhite)
-            self.corner = RoundedRectangle(pos=self.pos, size=self.size, radius=[5,])
-            
             
     def update_canvas(self, *args):
-        Color(primaryWhite)
+        global black
+        Color(rgba=primaryWhite)
         self.corner.pos = self.pos
         self.corner.size = self.size
 

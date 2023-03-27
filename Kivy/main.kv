@@ -6,29 +6,92 @@ WindowManager:
 <LoginScreen>:
     name: "login"
 
-    GridLayout:
-        cols:1
-
-        GridLayout:
-            cols: 2
-
-            Label:
-                text: "Login: "
-
-            TextInput:
-                id: login
-                multiline: False
+    size_hint: None, None
+    size: 300, 200
+    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    canvas.before:
+        Color:
+            rgba: 250/255, 250/255, 255/255, 1
+        RoundedRectangle:
+            size: 300, 200
+            radius: [5,]
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 20
+        padding: 20
+        BoxLayout:
+            orientation: "horizontal"
+            BoxLayout:
+                orientation: "horizontal"
             
-            Label:
-                text: "Password: "
+                Label:
+                    text: "Login: "
+                    color: 0,0,0,1
+            BoxLayout:
+                orientation: "horizontal"
+                canvas.before:
+                    Color:
+                        rgba: 250/255, 250/255, 255/255, 1
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5,] 
+                    Color:
+                        rgba: 17/255, 138/255, 178/255, 1
+                    Line:
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+                        width: 1.1
+                        dash_offset: 2
+                        dash_length: 4         
+                TextInput:
+                    id: login
+                    multiline: False
+                    background_normal: ""
+                    background_color: 0,0,0,0
+        BoxLayout:
+            orientation: "horizontal"
+            BoxLayout:
+                orientation: "horizontal"    
+                Label:
+                    text: "Password: "
+                    color: 0,0,0,1  
+            BoxLayout:
+                orientation: "horizontal"
+                canvas.before:
+                    Color:
+                        rgba: 250/255, 250/255, 255/255, 1
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5,] 
+                    Color:
+                        rgba: 17/255, 138/255, 178/255, 1
+                    Line:
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+                        width: 1.1
+                        dash_offset: 2
+                        dash_length: 4      
+                TextInput:
+                    id: passw
+                    multiline: False
+                    password: True
+                    background_normal: ""
+                    background_color: 0,0,0,0
+        BoxLayout:
+            orientation: "horizontal"
+            canvas.before:
 
-            TextInput:
-                id: passw
-                multiline: False
-
-        Button:
-            text: "Submit"
-            on_release: root.verify_credentials()
+                Color:
+                    rgba: 17/255, 138/255, 178/255, 1
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [5,] 
+            Button:
+                text: "Submit"
+                backgroun_normal: ""
+                background_color: 0, 0, 0, 0
+                on_release: root.verify_credentials()
 <MainScreen>:
     name: 'main'
     BoxLayout:
