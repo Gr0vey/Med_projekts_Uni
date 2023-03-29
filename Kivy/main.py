@@ -16,6 +16,9 @@ from kivy.graphics import Color, RoundedRectangle
 
 from functools import partial
 
+from ctypes import windll, c_int64
+
+windll.user32.SetProcessDpiAwarenessContext(c_int64(-4))
 Config.set('input', 'mouse', 'mouse,disable_multitouch') #multitouch atslēgšana
 kivy.require("2.0.0")
 
@@ -87,11 +90,15 @@ class RoundedButton(Button):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         with self.canvas.before:
-            global black
             Color(rgba=primaryWhite)
             self.corner = RoundedRectangle(pos=self.pos, size=self.size, radius=[5,])
         self.bind(pos=self.update_canvas)
         self.bind(size=self.update_canvas)
+        
+    def on_press(self):
+        with self.canvas.before:
+            Color(rgba=secondaryWhite)
+            self.corner = RoundedRectangle(pos=self.pos, size=self.size, radius=[5,])
             
     def update_canvas(self, *args):
         global black
@@ -122,6 +129,7 @@ class List(BoxLayout):
                 self.add_widget(button)
                 
     def set_variable(self,id,button_object): # Metode, kura atbild par to lai informācija par skolēnu nomainās uz ekrāna
+        
         #=========================================================================================================# Skolena info
         with db.connect('datubaze.db') as con:
             cur = con.execute(f"""SELECT * FROM skolenu_saraksts WHERE skolena_id = {id}""")

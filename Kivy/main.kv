@@ -7,40 +7,41 @@ WindowManager:
     name: "login"
 
     size_hint: None, None
-    size: 300, 200
+    size: 400, 300
     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
     canvas.before:
         Color:
             rgba: 250/255, 250/255, 255/255, 1
         RoundedRectangle:
-            size: 300, 200
-            radius: [5,]
+            size: 400, 300
+            radius: [10,]
     BoxLayout:
         orientation: "vertical"
-        spacing: 20
-        padding: 20
+        spacing: 40
+        padding: 40
         BoxLayout:
             orientation: "horizontal"
             BoxLayout:
                 orientation: "horizontal"
             
                 Label:
-                    text: "Login: "
+                    text: "Lietotājvārds"
                     color: 0,0,0,1
+                    font_size: 20
             BoxLayout:
                 orientation: "horizontal"
                 canvas.before:
                     Color:
-                        rgba: 250/255, 250/255, 255/255, 1
+                        rgba: 250/255, 250/255, 255/255, 0
                     RoundedRectangle:
                         pos: self.pos
                         size: self.size
-                        radius: [5,] 
+                        radius: [20,] 
                     Color:
-                        rgba: 17/255, 138/255, 178/255, 1
+                        rgba: 6/255, 214/255, 160/255, 1 #06D6A0
                     Line:
-                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
-                        width: 1.1
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 20)
+                        width: 0.5
                         dash_offset: 2
                         dash_length: 4         
                 TextInput:
@@ -48,27 +49,29 @@ WindowManager:
                     multiline: False
                     background_normal: ""
                     background_color: 0,0,0,0
+                    font_size: 20
         BoxLayout:
             orientation: "horizontal"
             BoxLayout:
                 orientation: "horizontal"    
                 Label:
-                    text: "Password: "
-                    color: 0,0,0,1  
+                    text: "Parole"
+                    color: 0,0,0,1
+                    font_size: 20  
             BoxLayout:
                 orientation: "horizontal"
                 canvas.before:
                     Color:
-                        rgba: 250/255, 250/255, 255/255, 1
+                        rgba: 223/255, 223/255, 230/255, 0
                     RoundedRectangle:
                         pos: self.pos
                         size: self.size
-                        radius: [5,] 
+                        radius: [20,] 
                     Color:
-                        rgba: 17/255, 138/255, 178/255, 1
+                        rgba: 6/255, 214/255, 160/255, 1 #06D6A0
                     Line:
-                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
-                        width: 1.1
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 20)
+                        width: 0.5
                         dash_offset: 2
                         dash_length: 4      
                 TextInput:
@@ -77,18 +80,20 @@ WindowManager:
                     password: True
                     background_normal: ""
                     background_color: 0,0,0,0
+                    font_size: 20
         BoxLayout:
             orientation: "horizontal"
             canvas.before:
 
                 Color:
-                    rgba: 17/255, 138/255, 178/255, 1
+                    rgba: 6/255, 214/255, 160/255, 1 #06D6A0
                 RoundedRectangle:
                     pos: self.pos
                     size: self.size
-                    radius: [5,] 
+                    radius: [20,] 
             Button:
-                text: "Submit"
+                font_size: 20
+                text: "Pieslēgties"
                 backgroun_normal: ""
                 background_color: 0, 0, 0, 0
                 on_release: root.verify_credentials()
