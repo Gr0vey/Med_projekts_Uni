@@ -1,7 +1,9 @@
+#:import NoTransition kivy.uix.screenmanager.NoTransition
 WindowManager:
     LoginScreen:
     MainScreen:
     AmbulatoraisZurnals:
+    
 
 <LoginScreen>:
     name: "login"
@@ -101,17 +103,37 @@ WindowManager:
     name: 'main'
     BoxLayout:
         orientation: "vertical"
+        canvas.before:
+            Color:
+                rgba: 223/255, 223/255, 230/255, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
         BoxLayout:
+            canvas.before:
+                Color:
+                    rgba: 6/255, 214/255, 160/255, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
             size_hint: 1, 0.08
             Button:
                 text: "Skolēnu saraksts"
-                
+                background_normal: ""
+                background_color: 0,0,0,0
+                color: 250/255, 250/255, 255/255, 1
             Button:
+                background_normal: ""
+                background_color: 250/255, 250/255, 255/255, 1
+                color: 41/225, 41/225, 40/255, 1
                 text:"Ambulatorais Žurnāls"
                 on_release:
                     app.root.current = "zurnals"
                     root.manager.transition.direction = "left"
             Button:
+                background_normal: ""
+                background_color: 250/255, 250/255, 255/255, 1
+                color: 41/225, 41/225, 40/255, 1
                 text:"..."#papildus iestatijumi
                 size_hint: 0.15, 1
                    
@@ -128,13 +150,31 @@ WindowManager:
                         size_hint: 1, None
                         height: self.minimum_height
                 BoxLayout:
+                    padding: 5
+                    canvas.before:
+                        Color:
+                            rgba: 250/255, 250/255, 255/255, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
                     orientation: "horizontal"
                     size_hint: 1, 0.1
-                    TextInput:
-                        text: ""
-                        size_hint: 2, 1
-                    Button:
-                        text:"Meklēt"
+                    BoxLayout:
+                        orientation: "horizontal"
+                        canvas.before:
+                            Color:
+                                rgba: 223/255, 223/255, 230/255, 1
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [15,]
+                        TextInput:
+                            text: ""
+                            size_hint: 2, 1
+                            background_normal: ""
+                            background_color: 0,0,0,0
+                        Button:
+                            text:"Meklēt"
                 
             BoxLayout:
                 orientation: "horizontal"
@@ -208,16 +248,37 @@ WindowManager:
     name: 'zurnals'
     BoxLayout:
         orientation: "vertical"
+        canvas.before:
+            Color:
+                rgba: 223/255, 223/255, 230/255, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
         BoxLayout:
+            canvas.before:
+                Color:
+                    rgba: 6/255, 214/255, 160/255, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
             size_hint: 1, 0.08
             Button:
+                background_normal: ""
+                background_color: 250/255, 250/255, 255/255, 1
+                color: 41/225, 41/225, 40/255, 1
                 text: "Skolēnu saraksts"
                 on_release:
                     app.root.current = "main"
                     root.manager.transition.direction = "right"
             Button:
                 text:"Ambulatorais Žurnāls"
+                background_normal: ""
+                background_color: 0,0,0,0
+                color: 250/255, 250/255, 255/255, 1
             Button:
+                background_normal: ""
+                background_color: 250/255, 250/255, 255/255, 1
+                color: 41/225, 41/225, 40/255, 1
                 text:"..."#papildus iestatijumi
                 size_hint: 0.15, 1
         Label:
