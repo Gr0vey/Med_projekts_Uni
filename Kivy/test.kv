@@ -1,24 +1,11 @@
-<LoginScreen>:
-    size_hint: None, None
-    size: 300, 200
-    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+<AnotherClass>:
+    orientation: 'vertical'
+    MyBoxLayout:
+        id: my_box_layout_id
+        size_hint_y: None
+        height: self.minimum_height
+    Button:
+        text: 'Add button'
+        on_release: root.my_box_layout.add_widget(Button(text='New button'))
 
-    BoxLayout:
-        spacing: 20
-        padding: 20
-
-        TextInput:
-            id: username_input
-            hint_text: 'Username'
-            multiline: False
-
-        TextInput:
-            id: password_input
-            hint_text: 'Password'
-            password: True
-            multiline: False
-
-        Button:
-            id: login_button
-            text: 'Access'
-            on_press: root.login()
+<MyBoxLayout>:

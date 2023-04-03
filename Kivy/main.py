@@ -6,14 +6,14 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.metrics import dp
-from kivy.properties import StringProperty, ObjectProperty
+from kivy.properties import StringProperty, ObjectProperty, ListProperty
 import sqlite3 as db
 import kivy
 from kivy.config import Config
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.core.window import Window
 from kivy.graphics import Color, RoundedRectangle
-
+from kivy.uix.screenmanager import ScreenManager, NoTransition
 from functools import partial
 
 from ctypes import windll, c_int64
@@ -32,6 +32,7 @@ textBlack = (41/225, 41/225, 40/255, 1)         #292928
 accent1 = (17/255, 138/255, 178/255, 1)         #118AB2
 accent2 = (239/255, 71/255, 111/255, 1)         #EF476F
 accent3 = (6/255, 214/255, 160/255, 1)          #06D6A0
+#b249b3
 
 Window.clearcolor = secondaryWhite
 #===============================# Colors #===============================#
@@ -40,35 +41,12 @@ class LoginScreen(Screen):
     def verify_credentials(self):
         if self.ids["login"].text == "" and self.ids["passw"].text == "":
             self.manager.current = "main"
-            
-class MainScreen(Screen):
-    klase = StringProperty('Klase:\n')
-    vards = StringProperty('Vards Uzvards:\n')
-    pk = StringProperty('Personas kods:\n')
-    dzimsanas_d = StringProperty('Dzimšanas dati:\n')
-    tel = StringProperty('Telefona nummurs:\n')
-    med = StringProperty('Med. karte:\n')
-    slimibas = StringProperty('Hroniskās slimības:\n')
-    piezimes = StringProperty('Piezīmes:\n')
-
-class AmbulatoraisZurnals(Screen):
-    pass
-
-class WindowManager(ScreenManager):
-    pass
-
-with db.connect('datubaze.db') as con:
-    cur = con.execute("""SELECT * FROM skolenu_saraksts ORDER BY klase, klases_burts, vards_uzvards
-    """)
-    skoleni = cur.fetchall()
-    #izveletais_skolens = skoleni[0][0]
-    #print(izveletais_skolens)
-class BoxlayoutEx(BoxLayout):
-    pass
 
 class Ieraksti(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.orientation = 'vertical'
+
     # def get_content(self,skolena_id):
         with db.connect('datubaze.db') as con:
             cur = con.execute(f"""SELECT * FROM ambulatorais_zurnals WHERE skolena_id = {946}""")
@@ -85,6 +63,36 @@ class Ieraksti(BoxLayout):
                     color= textBlack,#Text color
                     background_normal=""
                 ))
+    def update(self):
+        self.clear_widgets()         
+
+class MainScreen(Screen):
+    klase = StringProperty('Klase:\n')
+    vards = StringProperty('Vards Uzvards:\n')
+    pk = StringProperty('Personas kods:\n')
+    dzimsanas_d = StringProperty('Dzimšanas dati:\n')
+    tel = StringProperty('Telefona nummurs:\n')
+    med = StringProperty('Med. karte:\n')
+    slimibas = StringProperty('Hroniskās slimības:\n')
+    piezimes = StringProperty('Piezīmes:\n')
+    xxx = ObjectProperty(Ieraksti())
+
+class AmbulatoraisZurnals(Screen):
+    pass
+
+class WindowManager(ScreenManager):
+    pass
+
+with db.connect('datubaze.db') as con:
+    cur = con.execute("""SELECT * FROM skolenu_saraksts ORDER BY klase, klases_burts, vards_uzvards
+    """)
+    skoleni = cur.fetchall()
+    #izveletais_skolens = skoleni[0][0]
+    #print(izveletais_skolens)
+class BoxlayoutEx(BoxLayout):
+    pass
+
+
                 
 class RoundedButton(Button):
     def __init__(self, **kwargs):
@@ -129,7 +137,7 @@ class List(BoxLayout):
                 self.add_widget(button)
                 
     def set_variable(self,id,button_object): # Metode, kura atbild par to lai informācija par skolēnu nomainās uz ekrāna
-        
+        Ieraksti.clear_widgets()
         #=========================================================================================================# Skolena info
         with db.connect('datubaze.db') as con:
             cur = con.execute(f"""SELECT * FROM skolenu_saraksts WHERE skolena_id = {id}""")

@@ -141,6 +141,7 @@ WindowManager:
             orientation: "horizontal"
             
             BoxLayout:
+                id: logs1 #layouts ar skolenu sarakstu un meklesanu
                 orientation: "vertical"
                 width: 225
                 size_hint: None, 1
@@ -177,6 +178,7 @@ WindowManager:
                             text:"Meklēt"
                 
             BoxLayout:
+                id: logs2
                 orientation: "horizontal"
                 BoxLayout:
                     orientation: "vertical"
@@ -188,6 +190,7 @@ WindowManager:
                             text: "Izvēlētais ieraksts"
                         ScrollView:
                             Ieraksti:
+                                id: ieraksti
                                 orientation: "vertical"
                                 size_hint: 1, None
                                 height: self.minimum_height
