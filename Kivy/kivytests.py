@@ -1,46 +1,28 @@
 from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.popup import Popup
 from kivy.uix.button import Button
 from kivy.uix.label import Label
+from kivy.uix.gridlayout import GridLayout
 
-class ButtonBoxLayout(BoxLayout):
-    def __init__(self, content_box, **kwargs):
-        super(ButtonBoxLayout, self).__init__(**kwargs)
-        self.content_box = content_box
-        # Create the buttons
-        self.button1 = Button(text="Button 1", on_press=self.on_button1_press)
-        self.button2 = Button(text="Button 2", on_press=self.on_button2_press)
-        self.button3 = Button(text="Button 3", on_press=self.on_button3_press)
-        # Add the buttons to the layout
-        self.add_widget(self.button1)
-        self.add_widget(self.button2)
-        self.add_widget(self.button3)
 
-    def on_button1_press(self, instance):
-        self.content_box.clear_widgets()
-        self.content_box.add_widget(Label(text="Button 1 pressed"))
-
-    def on_button2_press(self, instance):
-        self.content_box.clear_widgets()
-        self.content_box.add_widget(Label(text="Button 2 pressed"))
-
-    def on_button3_press(self, instance):
-        self.content_box.clear_widgets()
-        self.content_box.add_widget(Label(text="Button 3 pressed"))
-
-class ContentBoxLayout(BoxLayout):
-    pass
-
-class MyApp(App):
+class PopupExample(App):
     def build(self):
-        # Create the layouts
-        content_layout = ContentBoxLayout()
-        button_layout = ButtonBoxLayout(content_box=content_layout)
-        # Add the layouts to the app
-        root = BoxLayout(orientation='horizontal')
-        root.add_widget(button_layout)
-        root.add_widget(content_layout)
-        return root
+        layout = GridLayout(cols=1)
+        button = Button(text='Click Me')
+        button.bind(on_press=self.show_popup)
+        layout.add_widget(button)
+        return layout
+
+    def show_popup(self, event):
+        popup_layout = GridLayout(cols=1)
+        popup_label = Label(text='Hello, world!')
+        popup_layout.add_widget(popup_label)
+        popup_button = Button(text='Close')
+        popup_layout.add_widget(popup_button)
+        popup = Popup(title='Popup Example', content=popup_layout, size_hint=(None, None), size=(400, 400))
+        popup_button.bind(on_press=popup.dismiss)
+        popup.open()
+
 
 if __name__ == '__main__':
-    MyApp().run()
+    PopupExample().run()

@@ -13,8 +13,9 @@ from kivy.config import Config
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.core.window import Window
 from kivy.graphics import Color, RoundedRectangle
-from kivy.uix.screenmanager import ScreenManager, NoTransition
 from functools import partial
+from kivy.clock import Clock
+from kivy.uix.popup import Popup
 
 from ctypes import windll, c_int64
 
@@ -41,30 +42,7 @@ class LoginScreen(Screen):
     def verify_credentials(self):
         if self.ids["login"].text == "" and self.ids["passw"].text == "":
             self.manager.current = "main"
-
-class Ieraksti(BoxLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.orientation = 'vertical'
-
-    # def get_content(self,skolena_id):
-        with db.connect('datubaze.db') as con:
-            cur = con.execute(f"""SELECT * FROM ambulatorais_zurnals WHERE skolena_id = {946}""")
-            ieraksti = cur.fetchall()
-            for i in ieraksti:
-                self.add_widget(Button(
-                    text=f'{i}',
-                    text_size= (200,None),    
-                    halign= 'left',
-                    valign= 'bottom',
-                    size_hint=(1,None),
-                    size=(dp(20),dp(60)),
-                    background_color = (0,0,0,0),#Color of the button
-                    color= textBlack,#Text color
-                    background_normal=""
-                ))
-    def update(self):
-        self.clear_widgets()         
+   
 
 class MainScreen(Screen):
     klase = StringProperty('Klase:\n')
@@ -75,7 +53,6 @@ class MainScreen(Screen):
     med = StringProperty('Med. karte:\n')
     slimibas = StringProperty('Hroniskās slimības:\n')
     piezimes = StringProperty('Piezīmes:\n')
-    xxx = ObjectProperty(Ieraksti())
 
 class AmbulatoraisZurnals(Screen):
     pass
@@ -102,11 +79,18 @@ class RoundedButton(Button):
             self.corner = RoundedRectangle(pos=self.pos, size=self.size, radius=[5,])
         self.bind(pos=self.update_canvas)
         self.bind(size=self.update_canvas)
-        
+    
+    def change_color(self,time):
+        with self.canvas.before:
+            Color(rgba=primaryWhite)
+            self.corner = RoundedRectangle(pos=self.pos, size=self.size, radius=[5,])
+            #print(time) laiks kas tika padots
+             
     def on_press(self):
         with self.canvas.before:
             Color(rgba=secondaryWhite)
             self.corner = RoundedRectangle(pos=self.pos, size=self.size, radius=[5,])
+            Clock.schedule_once(self.change_color, 0.05)
             
     def update_canvas(self, *args):
         global black
@@ -114,7 +98,39 @@ class RoundedButton(Button):
         self.corner.pos = self.pos
         self.corner.size = self.size
 
-         
+class Ieraksti(BoxLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.orientation = 'vertical'
+
+    def update(self,id):
+        self.clear_widgets()
+        with db.connect('datubaze.db') as con:
+            cur = con.execute(f"""SELECT * FROM ambulatorais_zurnals WHERE skolena_id = {id}""")
+            ieraksti = cur.fetchall()
+            for i in ieraksti:
+                self.add_widget(RoundedButton(
+                    text=f'{i}',
+                    text_size= (200,None),    
+                    halign= 'left',
+                    valign= 'bottom',
+                    size_hint=(1,None),
+                    size=(dp(20),dp(60)),
+                    background_color = (0,0,0,0),#Color of the button
+                    color= textBlack,#Text color
+                    background_normal=""
+                ))
+class IzveidotIerakstu(Button):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+    def on_press(self):
+        popup_layout = BoxLayout()
+        popup_button = Button(text='Close')
+        popup_layout.add_widget(popup_button)
+        popup = Popup(title='Ieraksta izveide', content=popup_layout, size_hint=(None, None), size=(600, 400),background="",separator_color=accent3,title_color=textBlack)
+        popup_button.bind(on_press=popup.dismiss)
+        popup.open()
+    
 class List(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)   
@@ -135,9 +151,9 @@ class List(BoxLayout):
                         background_normal=""
                         )
                 self.add_widget(button)
-                
+                            
     def set_variable(self,id,button_object): # Metode, kura atbild par to lai informācija par skolēnu nomainās uz ekrāna
-        Ieraksti.clear_widgets()
+
         #=========================================================================================================# Skolena info
         with db.connect('datubaze.db') as con:
             cur = con.execute(f"""SELECT * FROM skolenu_saraksts WHERE skolena_id = {id}""")
@@ -152,7 +168,7 @@ class List(BoxLayout):
         #=========================================================================================================#
 
         #=========================================================================================================# Ierakstu info
-        
+        self.parent.parent.parent.parent.parent.ids.ieraksti.update(id)
         #=========================================================================================================#
           
 kv = Builder.load_file("main.kv")

@@ -1,11 +1,23 @@
-<AnotherClass>:
-    orientation: 'vertical'
-    MyBoxLayout:
-        id: my_box_layout_id
-        size_hint_y: None
-        height: self.minimum_height
-    Button:
-        text: 'Add button'
-        on_release: root.my_box_layout.add_widget(Button(text='New button'))
+<Label>:
+    size_hint: 1, None
+    height: self.texture_size[1]
 
-<MyBoxLayout>:
+<Button>:
+    font_size: 20
+    padding: 10, 10
+    background_normal: ''
+    background_color: 0, 0.7, 0.7, 1
+    color: 1, 1, 1, 1
+
+<Popup>:
+    title: 'Popup Title'
+    content: Label(text='Popup content goes here.')
+    size_hint: None, None
+    size: 400, 400
+
+BoxLayout:
+    Button:
+        text: 'Press me'
+        on_press: app.show_popup(self)
+        size_hint: .5, .5
+        pos_hint: {'center_x': .5, 'center_y': .5}
