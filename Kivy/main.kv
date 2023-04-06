@@ -7,7 +7,6 @@ WindowManager:
 
 <LoginScreen>:
     name: "login"
-
     size_hint: None, None
     size: 400, 300
     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
@@ -34,18 +33,11 @@ WindowManager:
                 orientation: "horizontal"
                 canvas.before:
                     Color:
-                        rgba: 250/255, 250/255, 255/255, 0
+                        rgba: 223/255, 223/255, 230/255, 1
                     RoundedRectangle:
                         pos: self.pos
                         size: self.size
-                        radius: [20,] 
-                    Color:
-                        rgba: 6/255, 214/255, 160/255, 1 #06D6A0
-                    Line:
-                        rounded_rectangle: (self.x, self.y, self.width, self.height, 20)
-                        width: 0.5
-                        dash_offset: 2
-                        dash_length: 4         
+                        radius: [20,]        
                 TextInput:
                     id: login
                     multiline: False
@@ -88,7 +80,7 @@ WindowManager:
             canvas.before:
 
                 Color:
-                    rgba: 6/255, 214/255, 160/255, 1 #06D6A0
+                    rgba: root.accent1k #6/255, 214/255, 160/255, 1 #06D6A0
                 RoundedRectangle:
                     pos: self.pos
                     size: self.size
@@ -174,8 +166,7 @@ WindowManager:
                             size_hint: 2, 1
                             background_normal: ""
                             background_color: 0,0,0,0
-                        Button:
-                            text:"Meklēt"
+                        SkoleniSearch:
                 
             BoxLayout:
                 id: logs2

@@ -12,7 +12,7 @@ import kivy
 from kivy.config import Config
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.core.window import Window
-from kivy.graphics import Color, RoundedRectangle
+from kivy.graphics import Color, RoundedRectangle, Rectangle
 from functools import partial
 from kivy.clock import Clock
 from kivy.uix.popup import Popup
@@ -23,7 +23,6 @@ windll.user32.SetProcessDpiAwarenessContext(c_int64(-4))
 Config.set('input', 'mouse', 'mouse,disable_multitouch') #multitouch atslēgšana
 kivy.require("2.0.0")
 
-
 #===============================# Colors #===============================#
 
 primaryWhite = (250/255, 250/255, 255/255, 1)   #FAFAFF
@@ -33,12 +32,16 @@ textBlack = (41/225, 41/225, 40/255, 1)         #292928
 accent1 = (17/255, 138/255, 178/255, 1)         #118AB2
 accent2 = (239/255, 71/255, 111/255, 1)         #EF476F
 accent3 = (6/255, 214/255, 160/255, 1)          #06D6A0
-#b249b3
+accent4 = (178/255, 73/255, 179/255, 1)         #b249b3
 
 Window.clearcolor = secondaryWhite
 #===============================# Colors #===============================#
 
 class LoginScreen(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+    accent1k = ListProperty(accent4)
+
     def verify_credentials(self):
         if self.ids["login"].text == "" and self.ids["passw"].text == "":
             self.manager.current = "main"
@@ -53,6 +56,7 @@ class MainScreen(Screen):
     med = StringProperty('Med. karte:\n')
     slimibas = StringProperty('Hroniskās slimības:\n')
     piezimes = StringProperty('Piezīmes:\n')
+    accent1k = ListProperty(accent4)
 
 class AmbulatoraisZurnals(Screen):
     pass
@@ -64,13 +68,7 @@ with db.connect('datubaze.db') as con:
     cur = con.execute("""SELECT * FROM skolenu_saraksts ORDER BY klase, klases_burts, vards_uzvards
     """)
     skoleni = cur.fetchall()
-    #izveletais_skolens = skoleni[0][0]
-    #print(izveletais_skolens)
-class BoxlayoutEx(BoxLayout):
-    pass
 
-
-                
 class RoundedButton(Button):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -130,7 +128,15 @@ class IzveidotIerakstu(Button):
         popup = Popup(title='Ieraksta izveide', content=popup_layout, size_hint=(None, None), size=(600, 400),background="",separator_color=accent3,title_color=textBlack)
         popup_button.bind(on_press=popup.dismiss)
         popup.open()
-    
+
+class SkoleniSearch(Button):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.text = ""
+        self.background_normal = "..\\images\\searchicon.png"
+        self.color = black
+        self.background_color = (0,0,0,1)
+
 class List(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)   
