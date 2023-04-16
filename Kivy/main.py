@@ -125,31 +125,33 @@ class Ieraksti(BoxLayout):
             self.spacing = 1
             for i in ieraksti:
                 box = RoundedBox(orientation='horizontal', size_hint_y=None, height=230, box_color=(1,1,1,1), corner_radius=[10,])
-            
+                
                 if i[8] == 'nav':
                     trauma_box = RoundedBox(size_hint_x=None, width=20,box_color=(0,1,.5,1), corner_radius=[10,0,0,10])
                 elif i[8] == 'ir':
                     trauma_box = RoundedBox(size_hint_x=None, width=20,box_color=(1,0,.3,1), corner_radius=[10,0,0,10])
                 box.add_widget(trauma_box)
                 
-                main_content_box = BoxLayout(orientation='vertical')
+                main_content_box = BoxLayout(orientation='vertical',padding=(10,0,10,5))
                 
-                name_boxx = BoxLayout(size_hint_y=None, height=30)
+                name_boxx = BoxLayout(size_hint_y=None, height=40)
                 
                 
-                name = Label(text=f'{i[4]} {i[5]}', halign='left', valign='middle', padding=(5,5), text_size=(None, None),font_size=25,color=textBlack)
+                name = Label(text=f'{i[4]} {i[5]}', halign='left', valign='middle', padding=(5,5), text_size=(None, None),font_size=25)
                 name.bind(size=self.on_button_size)
+                iesatijumi = Button(background_normal="",background_color=(0,0,0,0), text="...", color=(0,0,0,1),size_hint_x=None,width=30)
                 
                 name_boxx.add_widget(name)
+                name_boxx.add_widget(iesatijumi)
                 main_content_box.add_widget(name_boxx)
                 
                 content_box = BoxLayout(orientation='horizontal',spacing=10,padding=10)
                 si_un_pa_box = RoundedBox(orientation='vertical', box_color=(.9,.9,.93,1), corner_radius=[5,])
                 
-                content_simptomi = Label(text=f'{i[6]}',size_hint=(1,None), height=35, halign='left', valign='middle', padding=(5,5), text_size=(None, None),color=textBlack)
+                content_simptomi = Label(text=f'{i[6]}',size_hint=(1,None), height=35, halign='left', valign='middle', padding=(5,5), text_size=(None, None))
                 content_simptomi.bind(size=self.on_button_size)
                 
-                content_palidz = Label(text=f'{i[7]}', halign='left', valign='top', padding=(5,5), text_size=(None, None),color=textBlack)
+                content_palidz = Label(text=f'{i[7]}', halign='left', valign='top', padding=(5,5), text_size=(None, None))
                 content_palidz.bind(size=self.on_button_size)
                 
                 si_un_pa_box.add_widget(content_simptomi)
@@ -157,7 +159,7 @@ class Ieraksti(BoxLayout):
                 content_box.add_widget(si_un_pa_box)
                 
                 piezimes_layout = RoundedBox(orientation='vertical', box_color=(.9,.9,.93,1), corner_radius=[5,])
-                piezimes_box = Label(text=f'{i[9]}',size_hint=(0.4,1), halign='left', valign='top', padding=(5,5), text_size=(None, None),color=textBlack)
+                piezimes_box = Label(text=f'{i[9]}',size_hint=(0.4,1), halign='left', valign='top', padding=(5,5), text_size=(None, None))
                 piezimes_box.bind(size=self.on_button_size)
                 
                 piezimes_layout.add_widget(piezimes_box)
@@ -165,7 +167,7 @@ class Ieraksti(BoxLayout):
                 
                 main_content_box.add_widget(content_box)
                 
-                time_box = Label(text=f'{i[3]} • {i[2]}',size_hint_y=None, height=20, halign='right', valign='middle', padding=(5,5), text_size=(None, None), color=textBlack)
+                time_box = Label(text=f'{i[3]} • {i[2]}',size_hint_y=None, height=20, halign='right', valign='middle', padding=(5,5), text_size=(None, None))
                 time_box.bind(size=self.on_button_size)
                 
                 main_content_box.add_widget(time_box)

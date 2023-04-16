@@ -39,7 +39,7 @@ class Ieraksti(BoxLayout):
         self.spacing = 10
         self.padding = 10
         
-        for m in range(4):
+        for m in range(20):
               
             i = (1,500,'20/12/2023','14:25','Aleksejs Šematjuks','12.a','Vēdera sāpes','Kautkādas rekomendācijas',random.choice(['nav','ir']),'Bez piezīmēm')
             
