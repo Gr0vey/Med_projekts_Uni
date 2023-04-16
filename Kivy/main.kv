@@ -3,7 +3,9 @@ WindowManager:
     LoginScreen:
     MainScreen:
     AmbulatoraisZurnals:
-    
+
+<Label>:
+    font_size: dp(20)
 
 <LoginScreen>:
     name: "login"
@@ -104,7 +106,7 @@ WindowManager:
         BoxLayout:
             canvas.before:
                 Color:
-                    rgba: 6/255, 214/255, 160/255, 1
+                    rgba: 178/255, 73/255, 179/255, 1
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -135,7 +137,7 @@ WindowManager:
             BoxLayout:
                 id: logs1 #layouts ar skolenu sarakstu un meklesanu
                 orientation: "vertical"
-                width: 225
+                width: 300
                 size_hint: None, 1
                 ScrollView:
                     List:#saraksts ar skoleniem py failā
@@ -151,7 +153,8 @@ WindowManager:
                             pos: self.pos
                             size: self.size
                     orientation: "horizontal"
-                    size_hint: 1, 0.1
+                    size_hint: 1, None
+                    height: 60
                     BoxLayout:
                         orientation: "horizontal"
                         canvas.before:
@@ -162,11 +165,13 @@ WindowManager:
                                 size: self.size
                                 radius: [15,]
                         TextInput:
-                            text: ""
-                            size_hint: 2, 1
+                            text:""
                             background_normal: ""
                             background_color: 0,0,0,0
                         SkoleniSearch:
+                            size_hint: None, None
+                            size: 60, 60
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 
             BoxLayout:
                 id: logs2
@@ -175,16 +180,13 @@ WindowManager:
                     orientation: "vertical"
                     BoxLayout:
                         orientation: "vertical"
-                        Button:
-                            size_hint: 1, 0.5
-                            background_color: 0.7, 0.7, 0.7, 1
-                            text: "Izvēlētais ieraksts"
                         ScrollView:
                             Ieraksti:
                                 id: ieraksti
                                 orientation: "vertical"
                                 size_hint: 1, None
                                 height: self.minimum_height
+                                spacing: 10
                     BoxLayout:
                         size_hint: 1, 0.1
                         Button:
@@ -251,7 +253,7 @@ WindowManager:
         BoxLayout:
             canvas.before:
                 Color:
-                    rgba: 6/255, 214/255, 160/255, 1
+                    rgba: 178/255, 73/255, 179/255, 1
                 Rectangle:
                     pos: self.pos
                     size: self.size

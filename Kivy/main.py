@@ -32,7 +32,7 @@ textBlack = (41/225, 41/225, 40/255, 1)         #292928
 accent1 = (17/255, 138/255, 178/255, 1)         #118AB2
 accent2 = (239/255, 71/255, 111/255, 1)         #EF476F
 accent3 = (6/255, 214/255, 160/255, 1)          #06D6A0
-accent4 = (178/255, 73/255, 179/255, 1)         #b249b3
+accent4 = (178/255, 73/255, 179/255, 1)         #b249b3 #d864d9
 
 Window.clearcolor = secondaryWhite
 #===============================# Colors #===============================#
@@ -68,7 +68,23 @@ with db.connect('datubaze.db') as con:
     cur = con.execute("""SELECT * FROM skolenu_saraksts ORDER BY klase, klases_burts, vards_uzvards
     """)
     skoleni = cur.fetchall()
-
+    
+class RoundedBox(BoxLayout):
+    def __init__(self, box_color, corner_radius, **kwargs):
+        super().__init__(**kwargs) 
+        self.box_color = box_color
+        self.corner_radius = corner_radius
+        with self.canvas.before:
+            Color(rgba=self.box_color)
+            self.corner = RoundedRectangle(pos=self.pos, size=self.size, radius= self.corner_radius)
+        self.bind(pos=self.update_canvas)
+        self.bind(size=self.update_canvas)
+        
+    def update_canvas(self, *args):
+        Color(rgba=self.box_color)
+        self.corner.pos = self.pos
+        self.corner.size = self.size
+        
 class RoundedButton(Button):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -106,18 +122,61 @@ class Ieraksti(BoxLayout):
         with db.connect('datubaze.db') as con:
             cur = con.execute(f"""SELECT * FROM ambulatorais_zurnals WHERE skolena_id = {id}""")
             ieraksti = cur.fetchall()
+            self.spacing = 1
             for i in ieraksti:
-                self.add_widget(RoundedButton(
-                    text=f'{i}',
-                    text_size= (200,None),    
-                    halign= 'left',
-                    valign= 'bottom',
-                    size_hint=(1,None),
-                    size=(dp(20),dp(60)),
-                    background_color = (0,0,0,0),#Color of the button
-                    color= textBlack,#Text color
-                    background_normal=""
-                ))
+                box = RoundedBox(orientation='horizontal', size_hint_y=None, height=230, box_color=(1,1,1,1), corner_radius=[10,])
+            
+                if i[8] == 'nav':
+                    trauma_box = RoundedBox(size_hint_x=None, width=20,box_color=(0,1,.5,1), corner_radius=[10,0,0,10])
+                elif i[8] == 'ir':
+                    trauma_box = RoundedBox(size_hint_x=None, width=20,box_color=(1,0,.3,1), corner_radius=[10,0,0,10])
+                box.add_widget(trauma_box)
+                
+                main_content_box = BoxLayout(orientation='vertical')
+                
+                name_boxx = BoxLayout(size_hint_y=None, height=30)
+                
+                
+                name = Label(text=f'{i[4]} {i[5]}', halign='left', valign='middle', padding=(5,5), text_size=(None, None),font_size=25,color=textBlack)
+                name.bind(size=self.on_button_size)
+                
+                name_boxx.add_widget(name)
+                main_content_box.add_widget(name_boxx)
+                
+                content_box = BoxLayout(orientation='horizontal',spacing=10,padding=10)
+                si_un_pa_box = RoundedBox(orientation='vertical', box_color=(.9,.9,.93,1), corner_radius=[5,])
+                
+                content_simptomi = Label(text=f'{i[6]}',size_hint=(1,None), height=35, halign='left', valign='middle', padding=(5,5), text_size=(None, None),color=textBlack)
+                content_simptomi.bind(size=self.on_button_size)
+                
+                content_palidz = Label(text=f'{i[7]}', halign='left', valign='top', padding=(5,5), text_size=(None, None),color=textBlack)
+                content_palidz.bind(size=self.on_button_size)
+                
+                si_un_pa_box.add_widget(content_simptomi)
+                si_un_pa_box.add_widget(content_palidz)
+                content_box.add_widget(si_un_pa_box)
+                
+                piezimes_layout = RoundedBox(orientation='vertical', box_color=(.9,.9,.93,1), corner_radius=[5,])
+                piezimes_box = Label(text=f'{i[9]}',size_hint=(0.4,1), halign='left', valign='top', padding=(5,5), text_size=(None, None),color=textBlack)
+                piezimes_box.bind(size=self.on_button_size)
+                
+                piezimes_layout.add_widget(piezimes_box)
+                content_box.add_widget(piezimes_layout)
+                
+                main_content_box.add_widget(content_box)
+                
+                time_box = Label(text=f'{i[3]} • {i[2]}',size_hint_y=None, height=20, halign='right', valign='middle', padding=(5,5), text_size=(None, None), color=textBlack)
+                time_box.bind(size=self.on_button_size)
+                
+                main_content_box.add_widget(time_box)
+                
+                box.add_widget(main_content_box)
+                
+                self.add_widget(box)
+            
+    def on_button_size(self, instance, size):
+        instance.text_size = size    
+                
 class IzveidotIerakstu(Button):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -133,9 +192,10 @@ class SkoleniSearch(Button):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.text = ""
-        self.background_normal = "..\\images\\searchicon.png"
+        self.background_normal = "..\\images\\searchUp.png"
+        self.background_down = "..\\images\\searchUp.png"
         self.color = black
-        self.background_color = (0,0,0,1)
+        self.background_color = (0.2,0.2,0.2,1)
 
 class List(BoxLayout):
     def __init__(self, **kwargs):
@@ -150,7 +210,7 @@ class List(BoxLayout):
                         halign= 'left',
                         valign= 'bottom',
                         size_hint=(1,None),
-                        size=(dp(20),dp(40)),
+                        size=(dp(20),dp(50)),
                         on_press=  partial(self.set_variable,i[0]),
                         background_color = (0,0,0,0),#Color of the button
                         color= textBlack,#Text color
@@ -180,9 +240,9 @@ class List(BoxLayout):
 kv = Builder.load_file("main.kv")
 
 
-class MyMainApp(App):
+class MedSistēma(App):
     def build(self):
         return kv
 
 if __name__ == "__main__":
-    MyMainApp().run()
+    MedSistēma().run()
