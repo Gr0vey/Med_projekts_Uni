@@ -6,14 +6,13 @@ from kivy.uix.scrollview import ScrollView
 from kivy.graphics import Color, RoundedRectangle, Rectangle
 from ctypes import windll, c_int64
 import random
-import loremipsum
+from kivy.core.window import Window
 
 windll.user32.SetProcessDpiAwarenessContext(c_int64(-4))
 
 class Label(Label):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.color = (0,0,0,1)
     
 class RoundedBox(BoxLayout):
     def __init__(self, box_color, corner_radius, **kwargs):
@@ -30,7 +29,7 @@ class RoundedBox(BoxLayout):
         Color(rgba=self.box_color)
         self.corner.pos = self.pos
         self.corner.size = self.size
-
+'''
 class Ieraksti(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -39,7 +38,7 @@ class Ieraksti(BoxLayout):
         self.spacing = 10
         self.padding = 10
         
-        for m in range(20):
+        for m in range(100):
               
             i = (1,500,'20/12/2023','14:25','Aleksejs Šematjuks','12.a','Vēdera sāpes','Kautkādas rekomendācijas',random.choice(['nav','ir']),'Bez piezīmēm')
             
@@ -105,11 +104,64 @@ class MyScrollView(ScrollView):
         box_layout = Ieraksti(orientation='vertical', size_hint_y=None)
         box_layout.bind(minimum_height=box_layout.setter('height'))
         self.add_widget(box_layout)
+'''
+class Profile(BoxLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
+        self.padding = 10
+        self.orientation = 'vertical'
+
+        box = RoundedBox(box_color=(1,1,1,1),corner_radius=[10,],orientation = 'vertical')
+
+        name = Label(text='[b]Aleksejs Šematjuks[/b]', size_hint_y = None, height= 120,  halign='center', valign='middle', padding=(5,5), text_size=(None, None), font_size=40, markup=True, color=(0.1,0.1,0.1,1))
+        name.bind(size=self.on_button_size)
+
+        main_content_box = BoxLayout(orientation='vertical')
+
+        user_data = BoxLayout(orientation='horizontal',size_hint_y=None, height=150)
+
+        nosaukumi = Label(text='Personas kods:\nDzimšanas dati:\nTelefona nummurs:\nMed. Karte:\nHroniskās slimības', halign='left', valign='top', padding=(10,10), text_size=(None, None), font_size=20, color=(0.2,0.2,0.2,1))
+        nosaukumi.bind(size=self.on_button_size)
+
+        dati = Label(text='191203-20827\n19/12/2003\n+37126059490\n-\n-', height=150,halign='right', valign='top', padding=(10,10), text_size=(None, None), font_size=20, color=(0.2,0.2,0.2,1))
+        dati.bind(size=self.on_button_size)
+
+        user_data.add_widget(nosaukumi)
+        user_data.add_widget(dati)
+
+        main_content_box.add_widget(user_data)
+
+        piezimes_box = BoxLayout(orientation='vertical',padding=10)
+
+        p_nosaukums = Label(text='Piezimes:',size_hint_y=None, height=40, halign='left', valign='top',padding=(10,10), text_size=(None, None), font_size=20, color=(0.2,0.2,0.2,1))
+        p_nosaukums.bind(size=self.on_button_size)
+
+        piezimes = RoundedBox(box_color=(0.9,0.9,0.9,1),corner_radius=[10,])
+
+        piezimes_box.add_widget(p_nosaukums)
+        piezimes_box.add_widget(piezimes)
+
+        main_content_box.add_widget(piezimes_box)
+
+        tool_box = BoxLayout(orientation='vertical',size_hint_y=None,height=40)
+        eddit_button = Button(text='...',background_normal='',size_hint_x=None,width=40,font_size=20, color=(0.2,0.2,0.2,1))
+        tool_box.add_widget(eddit_button)
+        
+        main_content_box.add_widget(tool_box)
+
+        box.add_widget(name)
+        box.add_widget(main_content_box)
+
+        self.add_widget(box)
+
+    def on_button_size(self, instance, size):
+        instance.text_size = size           
 
 class MyApp(App):
     def build(self):
-        return MyScrollView()
+        Window.size = (600, 800)
+        return Profile()
 
 
 if __name__ == '__main__':

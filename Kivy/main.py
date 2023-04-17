@@ -195,7 +195,7 @@ class SkoleniSearch(Button):
         super().__init__(**kwargs)
         self.text = ""
         self.background_normal = "..\\images\\searchUp.png"
-        self.background_down = "..\\images\\searchUp.png"
+        self.background_down = "..\\images\\searchDown.png"
         self.color = black
         self.background_color = (0.2,0.2,0.2,1)
 
