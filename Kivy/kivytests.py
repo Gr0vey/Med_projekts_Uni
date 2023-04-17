@@ -13,6 +13,7 @@ windll.user32.SetProcessDpiAwarenessContext(c_int64(-4))
 class Label(Label):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.color = (0,0,0,1)
     
 class RoundedBox(BoxLayout):
     def __init__(self, box_color, corner_radius, **kwargs):
@@ -38,7 +39,7 @@ class Ieraksti(BoxLayout):
         self.spacing = 10
         self.padding = 10
         
-        for m in range(100):
+        for m in range(10):
               
             i = (1,500,'20/12/2023','14:25','Aleksejs Šematjuks','12.a','Vēdera sāpes','Kautkādas rekomendācijas',random.choice(['nav','ir']),'Bez piezīmēm')
             
@@ -109,7 +110,6 @@ class Profile(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.padding = 10
         self.orientation = 'vertical'
 
         box = RoundedBox(box_color=(1,1,1,1),corner_radius=[10,],orientation = 'vertical')
@@ -144,8 +144,15 @@ class Profile(BoxLayout):
 
         main_content_box.add_widget(piezimes_box)
 
-        tool_box = BoxLayout(orientation='vertical',size_hint_y=None,height=40)
-        eddit_button = Button(text='...',background_normal='',size_hint_x=None,width=40,font_size=20, color=(0.2,0.2,0.2,1))
+        tool_box = BoxLayout(orientation='horizontal',size_hint_y=None,height=80)
+        filler = Label()
+        tool_box.add_widget(filler)
+        eddit_button = Button(color=(0.2,0.2,0.2,1),size_hint=(None,None),size=(80,80),
+                              background_normal = "..\\images\\userUp.png",
+                              background_down = "..\\images\\userDown.png",
+                              background_color = (.8,.8,.8,1)
+                              )
+        
         tool_box.add_widget(eddit_button)
         
         main_content_box.add_widget(tool_box)

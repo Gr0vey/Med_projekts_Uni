@@ -17,6 +17,8 @@ from functools import partial
 from kivy.clock import Clock
 from kivy.uix.popup import Popup
 
+import colorConfig
+
 from ctypes import windll, c_int64
 
 windll.user32.SetProcessDpiAwarenessContext(c_int64(-4))
@@ -45,6 +47,7 @@ class LoginScreen(Screen):
     def verify_credentials(self):
         if self.ids["login"].text == "" and self.ids["passw"].text == "":
             self.manager.current = "main"
+            Window.maximize()
    
 
 class MainScreen(Screen):
@@ -137,7 +140,7 @@ class Ieraksti(BoxLayout):
                 name_boxx = BoxLayout(size_hint_y=None, height=40)
                 
                 
-                name = Label(text=f'{i[4]} {i[5]}', halign='left', valign='middle', padding=(5,5), text_size=(None, None),font_size=25)
+                name = Label(text=f'{i[4]} {i[5]}', halign='left', valign='middle', padding=(5,5), text_size=(None, None),font_size=25,color=(textBlack))
                 name.bind(size=self.on_button_size)
                 iesatijumi = Button(background_normal="",background_color=(0,0,0,0), text="...", color=(0,0,0,1),size_hint_x=None,width=30)
                 
@@ -148,10 +151,10 @@ class Ieraksti(BoxLayout):
                 content_box = BoxLayout(orientation='horizontal',spacing=10,padding=10)
                 si_un_pa_box = RoundedBox(orientation='vertical', box_color=(.9,.9,.93,1), corner_radius=[5,])
                 
-                content_simptomi = Label(text=f'{i[6]}',size_hint=(1,None), height=35, halign='left', valign='middle', padding=(5,5), text_size=(None, None))
+                content_simptomi = Label(text=f'{i[6]}',size_hint=(1,None), height=35, halign='left', valign='middle', padding=(5,5), text_size=(None, None),color=(textBlack))
                 content_simptomi.bind(size=self.on_button_size)
                 
-                content_palidz = Label(text=f'{i[7]}', halign='left', valign='top', padding=(5,5), text_size=(None, None))
+                content_palidz = Label(text=f'{i[7]}', halign='left', valign='top', padding=(5,5), text_size=(None, None),color=(textBlack))
                 content_palidz.bind(size=self.on_button_size)
                 
                 si_un_pa_box.add_widget(content_simptomi)
@@ -159,7 +162,7 @@ class Ieraksti(BoxLayout):
                 content_box.add_widget(si_un_pa_box)
                 
                 piezimes_layout = RoundedBox(orientation='vertical', box_color=(.9,.9,.93,1), corner_radius=[5,])
-                piezimes_box = Label(text=f'{i[9]}',size_hint=(0.4,1), halign='left', valign='top', padding=(5,5), text_size=(None, None))
+                piezimes_box = Label(text=f'{i[9]}',size_hint=(0.4,1), halign='left', valign='top', padding=(5,5), text_size=(None, None),color=(textBlack))
                 piezimes_box.bind(size=self.on_button_size)
                 
                 piezimes_layout.add_widget(piezimes_box)
@@ -167,7 +170,7 @@ class Ieraksti(BoxLayout):
                 
                 main_content_box.add_widget(content_box)
                 
-                time_box = Label(text=f'{i[3]} • {i[2]}',size_hint_y=None, height=20, halign='right', valign='middle', padding=(5,5), text_size=(None, None))
+                time_box = Label(text=f'{i[3]} • {i[2]}',size_hint_y=None, height=20, halign='right', valign='middle', padding=(5,5), text_size=(None, None),color=(textBlack))
                 time_box.bind(size=self.on_button_size)
                 
                 main_content_box.add_widget(time_box)
@@ -189,15 +192,83 @@ class IzveidotIerakstu(Button):
         popup = Popup(title='Ieraksta izveide', content=popup_layout, size_hint=(None, None), size=(600, 400),background="",separator_color=accent3,title_color=textBlack)
         popup_button.bind(on_press=popup.dismiss)
         popup.open()
+        
+class Profile(BoxLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
+    def update(self,id):
+        self.clear_widgets()
+        with db.connect('datubaze.db') as con:
+            cur = con.execute(f"""SELECT * FROM skolenu_saraksts WHERE skolena_id = {id}""")
+            skolnieks = cur.fetchone()
+     
+            self.orientation = 'vertical'
 
+            box = RoundedBox(box_color=(1,1,1,1),corner_radius=[0,],orientation = 'vertical')
+
+            name = Label(text=f'[b]{skolnieks[3]} {skolnieks[1]}.{skolnieks[2]}[/b]', size_hint_y = None, height= 120,  halign='center', valign='middle', padding=(5,5), text_size=(None, None), font_size=40, markup=True, color=(0.1,0.1,0.1,1))
+            name.bind(size=self.on_button_size)
+
+            main_content_box = BoxLayout(orientation='vertical')
+
+            user_data = BoxLayout(orientation='horizontal',size_hint_y=None, height=150)
+
+            nosaukumi = Label(text='Personas kods:\nDzimšanas dati:\nTelefona nummurs:\nMed. Karte:\nHroniskās slimības', halign='left', valign='top', padding=(10,10), text_size=(None, None), font_size=20, color=(0.2,0.2,0.2,1))
+            nosaukumi.bind(size=self.on_button_size)
+
+            dati = Label(text=f'{skolnieks[4]}\n{skolnieks[5]}\n{skolnieks[6]}\n{skolnieks[7]}\n{skolnieks[8]}', height=150,halign='right', valign='top', padding=(10,10), text_size=(None, None), font_size=20, color=(0.2,0.2,0.2,1))
+            dati.bind(size=self.on_button_size)
+
+            user_data.add_widget(nosaukumi)
+            user_data.add_widget(dati)
+
+            main_content_box.add_widget(user_data)
+
+            piezimes_box = BoxLayout(orientation='vertical',padding=10)
+
+            p_nosaukums = Label(text='Piezimes:',size_hint_y=None, height=40, halign='left', valign='top',padding=(10,10), text_size=(None, None), font_size=20, color=(0.2,0.2,0.2,1))
+            p_nosaukums.bind(size=self.on_button_size)
+
+            piezimes = RoundedBox(box_color=(33/255, 34/255, 100/255, 20/255),corner_radius=[10,],padding=10)
+            piezimes_text = Label(text=f'{skolnieks[9]}',text_size=(None, None), font_size=20,halign='left', valign='top',color=(0.2,0.2,0.2,1))
+            piezimes_text.bind(size=self.on_button_size)
+            
+            piezimes.add_widget(piezimes_text)
+
+            piezimes_box.add_widget(p_nosaukums)
+            piezimes_box.add_widget(piezimes)
+
+            main_content_box.add_widget(piezimes_box)
+
+            tool_box = BoxLayout(orientation='horizontal',size_hint_y=None,height=80)
+            filler = Label()
+            tool_box.add_widget(filler)
+            eddit_button = Button(color=(0.2,0.2,0.2,1),size_hint=(None,None),size=(60, 60),
+                                background_normal = "..\\images\\userUp.png",
+                                background_down = "..\\images\\userDown.png",
+                                background_color = (.8,.8,.8,1)
+                                )
+            
+            tool_box.add_widget(eddit_button)
+            
+            main_content_box.add_widget(tool_box)
+
+            box.add_widget(name)
+            box.add_widget(main_content_box)
+
+            self.add_widget(box)
+
+    def on_button_size(self, instance, size):
+        instance.text_size = size
+        
 class SkoleniSearch(Button):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.text = ""
         self.background_normal = "..\\images\\searchUp.png"
         self.background_down = "..\\images\\searchDown.png"
-        self.color = black
-        self.background_color = (0.2,0.2,0.2,1)
+        self.background_color = (.3,.3,.3,1)
 
 class List(BoxLayout):
     def __init__(self, **kwargs):
@@ -223,16 +294,7 @@ class List(BoxLayout):
     def set_variable(self,id,button_object): # Metode, kura atbild par to lai informācija par skolēnu nomainās uz ekrāna
 
         #=========================================================================================================# Skolena info
-        with db.connect('datubaze.db') as con:
-            cur = con.execute(f"""SELECT * FROM skolenu_saraksts WHERE skolena_id = {id}""")
-            skolnieks = cur.fetchone()            
-            self.parent.parent.parent.parent.parent.ids.klase.text = f'{skolnieks[1]}.{skolnieks[2]}' # klases nummurs
-            self.parent.parent.parent.parent.parent.ids.vards.text = f'{skolnieks[3]}' # vards uzvards
-            self.parent.parent.parent.parent.parent.ids.pk.text = f'{skolnieks[4]}' # personas kods
-            self.parent.parent.parent.parent.parent.ids.dzimsanas_d.text = f'{skolnieks[5]}' # dzimšanas dati
-            self.parent.parent.parent.parent.parent.ids.tel.text = f'{skolnieks[6]}' # telefons
-            self.parent.parent.parent.parent.parent.ids.med.text = f'{skolnieks[7]}' # med karte
-            self.parent.parent.parent.parent.parent.ids.slimibas.text = f'{skolnieks[8]}' # hroniskās slimības
+        self.parent.parent.parent.parent.parent.ids.profile.update(id)
         #=========================================================================================================#
 
         #=========================================================================================================# Ierakstu info
@@ -244,6 +306,7 @@ kv = Builder.load_file("main.kv")
 
 class MedSistēma(App):
     def build(self):
+        Window.size = (400, 300)
         return kv
 
 if __name__ == "__main__":
