@@ -27,14 +27,17 @@ kivy.require("2.0.0")
 
 #===============================# Colors #===============================#
 
-primaryWhite = (250/255, 250/255, 255/255, 1)   #FAFAFF
-secondaryWhite = (223/255, 223/255, 230/255, 1) #DFDFE6
-black = (48/255, 52/255, 63/255, 1)             #30343F
-textBlack = (41/225, 41/225, 40/255, 1)         #292928
-accent1 = (17/255, 138/255, 178/255, 1)         #118AB2
-accent2 = (239/255, 71/255, 111/255, 1)         #EF476F
-accent3 = (6/255, 214/255, 160/255, 1)          #06D6A0
-accent4 = (178/255, 73/255, 179/255, 1)         #b249b3 #d864d9
+primaryWhite = colorConfig.primaryWhite         #FFFFFF
+secondaryWhite = colorConfig.secondaryWhite     #EEEEF3
+transparentGray = colorConfig.transparentGray
+
+lightGray = colorConfig.lightGray               #C3C6D6
+primaryGray = colorConfig.primaryGray           #4B4D58
+primaryBlack = colorConfig.primaryBlack         #212227
+
+primaryAccent = colorConfig.primaryAccent       #D864D9
+accentGreen = colorConfig.accentGreen           #62C370
+accentRed = colorConfig.accentRed               #D52941
 
 Window.clearcolor = secondaryWhite
 #===============================# Colors #===============================#
@@ -42,7 +45,7 @@ Window.clearcolor = secondaryWhite
 class LoginScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-    accent1k = ListProperty(accent4)
+    accent1k = ListProperty(primaryAccent)
 
     def verify_credentials(self):
         if self.ids["login"].text == "" and self.ids["passw"].text == "":
@@ -51,15 +54,7 @@ class LoginScreen(Screen):
    
 
 class MainScreen(Screen):
-    klase = StringProperty('Klase:\n')
-    vards = StringProperty('Vards Uzvards:\n')
-    pk = StringProperty('Personas kods:\n')
-    dzimsanas_d = StringProperty('Dzimšanas dati:\n')
-    tel = StringProperty('Telefona nummurs:\n')
-    med = StringProperty('Med. karte:\n')
-    slimibas = StringProperty('Hroniskās slimības:\n')
-    piezimes = StringProperty('Piezīmes:\n')
-    accent1k = ListProperty(accent4)
+    accent1k = ListProperty(primaryAccent)
 
 class AmbulatoraisZurnals(Screen):
     pass
@@ -73,13 +68,14 @@ with db.connect('datubaze.db') as con:
     skoleni = cur.fetchall()
     
 class RoundedBox(BoxLayout):
-    def __init__(self, box_color, corner_radius, **kwargs):
+    def __init__(self, box_color, corner_radius, image_source='', **kwargs):
         super().__init__(**kwargs) 
         self.box_color = box_color
         self.corner_radius = corner_radius
         with self.canvas.before:
             Color(rgba=self.box_color)
-            self.corner = RoundedRectangle(pos=self.pos, size=self.size, radius= self.corner_radius)
+            self.corner = RoundedRectangle(pos=self.pos, size=self.size, radius= self.corner_radius, source= image_source, allow_stretch=False, keep_ratio=True)
+            
         self.bind(pos=self.update_canvas)
         self.bind(size=self.update_canvas)
         
@@ -101,7 +97,6 @@ class RoundedButton(Button):
         with self.canvas.before:
             Color(rgba=primaryWhite)
             self.corner = RoundedRectangle(pos=self.pos, size=self.size, radius=[5,])
-            #print(time) laiks kas tika padots
              
     def on_press(self):
         with self.canvas.before:
@@ -127,12 +122,12 @@ class Ieraksti(BoxLayout):
             ieraksti = cur.fetchall()
             self.spacing = 1
             for i in ieraksti:
-                box = RoundedBox(orientation='horizontal', size_hint_y=None, height=230, box_color=(1,1,1,1), corner_radius=[10,])
+                box = RoundedBox(orientation='horizontal', size_hint_y=None, height=230, box_color=primaryWhite, corner_radius=[10,])
                 
                 if i[8] == 'nav':
-                    trauma_box = RoundedBox(size_hint_x=None, width=20,box_color=(0,1,.5,1), corner_radius=[10,0,0,10])
+                    trauma_box = RoundedBox(size_hint_x=None, width=20,box_color=accentGreen, corner_radius=[10,0,0,10])
                 elif i[8] == 'ir':
-                    trauma_box = RoundedBox(size_hint_x=None, width=20,box_color=(1,0,.3,1), corner_radius=[10,0,0,10])
+                    trauma_box = RoundedBox(size_hint_x=None, width=20,box_color=accentRed, corner_radius=[10,0,0,10])
                 box.add_widget(trauma_box)
                 
                 main_content_box = BoxLayout(orientation='vertical',padding=(10,0,10,5))
@@ -140,29 +135,29 @@ class Ieraksti(BoxLayout):
                 name_boxx = BoxLayout(size_hint_y=None, height=40)
                 
                 
-                name = Label(text=f'{i[4]} {i[5]}', halign='left', valign='middle', padding=(5,5), text_size=(None, None),font_size=25,color=(textBlack))
+                name = Label(text=f'{i[4]} {i[5]}', halign='left', valign='middle', padding=(5,5), text_size=(None, None),font_size=25,color=primaryBlack)
                 name.bind(size=self.on_button_size)
-                iesatijumi = Button(background_normal="",background_color=(0,0,0,0), text="...", color=(0,0,0,1),size_hint_x=None,width=30)
+                iesatijumi = Button(background_normal="",background_color=(0,0,0,0), text="...", color=primaryBlack,size_hint_x=None,width=30)
                 
                 name_boxx.add_widget(name)
                 name_boxx.add_widget(iesatijumi)
                 main_content_box.add_widget(name_boxx)
                 
                 content_box = BoxLayout(orientation='horizontal',spacing=10,padding=10)
-                si_un_pa_box = RoundedBox(orientation='vertical', box_color=(.9,.9,.93,1), corner_radius=[5,])
+                si_un_pa_box = RoundedBox(orientation='vertical', box_color=secondaryWhite, corner_radius=[5,])
                 
-                content_simptomi = Label(text=f'{i[6]}',size_hint=(1,None), height=35, halign='left', valign='middle', padding=(5,5), text_size=(None, None),color=(textBlack))
+                content_simptomi = Label(text=f'{i[6]}',size_hint=(1,None), height=35, halign='left', valign='middle', padding=(5,5), text_size=(None, None),color=(primaryBlack))
                 content_simptomi.bind(size=self.on_button_size)
                 
-                content_palidz = Label(text=f'{i[7]}', halign='left', valign='top', padding=(5,5), text_size=(None, None),color=(textBlack))
+                content_palidz = Label(text=f'{i[7]}', halign='left', valign='top', padding=(5,5), text_size=(None, None),color=(primaryBlack))
                 content_palidz.bind(size=self.on_button_size)
                 
                 si_un_pa_box.add_widget(content_simptomi)
                 si_un_pa_box.add_widget(content_palidz)
                 content_box.add_widget(si_un_pa_box)
                 
-                piezimes_layout = RoundedBox(orientation='vertical', box_color=(.9,.9,.93,1), corner_radius=[5,])
-                piezimes_box = Label(text=f'{i[9]}',size_hint=(0.4,1), halign='left', valign='top', padding=(5,5), text_size=(None, None),color=(textBlack))
+                piezimes_layout = RoundedBox(orientation='vertical', box_color=secondaryWhite, corner_radius=[5,])
+                piezimes_box = Label(text=f'{i[9]}',size_hint=(0.4,1), halign='left', valign='top', padding=(5,5), text_size=(None, None),color=primaryBlack)
                 piezimes_box.bind(size=self.on_button_size)
                 
                 piezimes_layout.add_widget(piezimes_box)
@@ -170,7 +165,7 @@ class Ieraksti(BoxLayout):
                 
                 main_content_box.add_widget(content_box)
                 
-                time_box = Label(text=f'{i[3]} • {i[2]}',size_hint_y=None, height=20, halign='right', valign='middle', padding=(5,5), text_size=(None, None),color=(textBlack))
+                time_box = Label(text=f'{i[3]} • {i[2]}',size_hint_y=None, height=20, halign='right', valign='middle', padding=(5,5), text_size=(None, None),color=primaryBlack)
                 time_box.bind(size=self.on_button_size)
                 
                 main_content_box.add_widget(time_box)
@@ -189,7 +184,7 @@ class IzveidotIerakstu(Button):
         popup_layout = BoxLayout()
         popup_button = Button(text='Close')
         popup_layout.add_widget(popup_button)
-        popup = Popup(title='Ieraksta izveide', content=popup_layout, size_hint=(None, None), size=(600, 400),background="",separator_color=accent3,title_color=textBlack)
+        popup = Popup(title='Ieraksta izveide', content=popup_layout, size_hint=(None, None), size=(600, 400),background="", separator_color=primaryAccent, title_color=primaryBlack)
         popup_button.bind(on_press=popup.dismiss)
         popup.open()
         
@@ -205,19 +200,19 @@ class Profile(BoxLayout):
      
             self.orientation = 'vertical'
 
-            box = RoundedBox(box_color=(1,1,1,1),corner_radius=[0,],orientation = 'vertical')
+            box = RoundedBox(box_color=primaryWhite ,corner_radius=[0,], orientation = 'vertical', image_source='..\\images\\background.png')
 
-            name = Label(text=f'[b]{skolnieks[3]} {skolnieks[1]}.{skolnieks[2]}[/b]', size_hint_y = None, height= 120,  halign='center', valign='middle', padding=(5,5), text_size=(None, None), font_size=40, markup=True, color=(0.1,0.1,0.1,1))
+            name = Label(text=f'[b]{skolnieks[3]} {skolnieks[1]}.{skolnieks[2]}[/b]', size_hint_y = None, height= 120,  halign='center', valign='middle', padding=(5,5), text_size=(None, None), font_size=40, markup=True, color=primaryBlack)
             name.bind(size=self.on_button_size)
 
             main_content_box = BoxLayout(orientation='vertical')
 
             user_data = BoxLayout(orientation='horizontal',size_hint_y=None, height=150)
 
-            nosaukumi = Label(text='Personas kods:\nDzimšanas dati:\nTelefona nummurs:\nMed. Karte:\nHroniskās slimības', halign='left', valign='top', padding=(10,10), text_size=(None, None), font_size=20, color=(0.2,0.2,0.2,1))
+            nosaukumi = Label(text='Personas kods:\nDzimšanas dati:\nTelefona nummurs:\nMed. Karte:\nHroniskās slimības', halign='left', valign='top', padding=(10,10), text_size=(None, None), font_size=20, color=primaryGray)
             nosaukumi.bind(size=self.on_button_size)
 
-            dati = Label(text=f'{skolnieks[4]}\n{skolnieks[5]}\n{skolnieks[6]}\n{skolnieks[7]}\n{skolnieks[8]}', height=150,halign='right', valign='top', padding=(10,10), text_size=(None, None), font_size=20, color=(0.2,0.2,0.2,1))
+            dati = Label(text=f'{skolnieks[4]}\n{skolnieks[5]}\n{skolnieks[6]}\n{skolnieks[7]}\n{skolnieks[8]}', height=150,halign='right', valign='top', padding=(10,10), text_size=(None, None), font_size=20, color=primaryGray)
             dati.bind(size=self.on_button_size)
 
             user_data.add_widget(nosaukumi)
@@ -227,11 +222,11 @@ class Profile(BoxLayout):
 
             piezimes_box = BoxLayout(orientation='vertical',padding=10)
 
-            p_nosaukums = Label(text='Piezimes:',size_hint_y=None, height=40, halign='left', valign='top',padding=(10,10), text_size=(None, None), font_size=20, color=(0.2,0.2,0.2,1))
+            p_nosaukums = Label(text='Piezimes:',size_hint_y=None, height=40, halign='left', valign='top',padding=(10,10), text_size=(None, None), font_size=20, color=primaryGray)
             p_nosaukums.bind(size=self.on_button_size)
 
-            piezimes = RoundedBox(box_color=(33/255, 34/255, 100/255, 20/255),corner_radius=[10,],padding=10)
-            piezimes_text = Label(text=f'{skolnieks[9]}',text_size=(None, None), font_size=20,halign='left', valign='top',color=(0.2,0.2,0.2,1))
+            piezimes = RoundedBox(box_color=transparentGray,corner_radius=[10,],padding=10)
+            piezimes_text = Label(text=f'{skolnieks[9]}',text_size=(None, None), font_size=20,halign='left', valign='top',color=primaryBlack)
             piezimes_text.bind(size=self.on_button_size)
             
             piezimes.add_widget(piezimes_text)
@@ -244,10 +239,10 @@ class Profile(BoxLayout):
             tool_box = BoxLayout(orientation='horizontal',size_hint_y=None,height=80)
             filler = Label()
             tool_box.add_widget(filler)
-            eddit_button = Button(color=(0.2,0.2,0.2,1),size_hint=(None,None),size=(60, 60),
+            eddit_button = Button(color=lightGray,size_hint=(None,None),size=(60, 60),
                                 background_normal = "..\\images\\userUp.png",
                                 background_down = "..\\images\\userDown.png",
-                                background_color = (.8,.8,.8,1)
+                                background_color = lightGray
                                 )
             
             tool_box.add_widget(eddit_button)
@@ -268,7 +263,7 @@ class SkoleniSearch(Button):
         self.text = ""
         self.background_normal = "..\\images\\searchUp.png"
         self.background_down = "..\\images\\searchDown.png"
-        self.background_color = (.3,.3,.3,1)
+        self.background_color = primaryGray
 
 class List(BoxLayout):
     def __init__(self, **kwargs):
@@ -286,13 +281,13 @@ class List(BoxLayout):
                         size=(dp(20),dp(50)),
                         on_press=  partial(self.set_variable,i[0]),
                         background_color = (0,0,0,0),#Color of the button
-                        color= textBlack,#Text color
+                        color= primaryBlack,#Text color
                         background_normal=""
                         )
                 self.add_widget(button)
                             
     def set_variable(self,id,button_object): # Metode, kura atbild par to lai informācija par skolēnu nomainās uz ekrāna
-
+        
         #=========================================================================================================# Skolena info
         self.parent.parent.parent.parent.parent.ids.profile.update(id)
         #=========================================================================================================#
