@@ -34,6 +34,7 @@ transparentGray = colorConfig.transparentGray
 lightGray = colorConfig.lightGray               #C3C6D6
 primaryGray = colorConfig.primaryGray           #4B4D58
 primaryBlack = colorConfig.primaryBlack         #212227
+secondaryBlack = colorConfig.secondaryBlack
 
 primaryAccent = colorConfig.primaryAccent       #D864D9
 accentGreen = colorConfig.accentGreen           #62C370
@@ -45,7 +46,7 @@ Window.clearcolor = secondaryWhite
 class LoginScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-    accent1k = ListProperty(primaryAccent)
+    
 
     def verify_credentials(self):
         if self.ids["login"].text == "" and self.ids["passw"].text == "":
@@ -54,13 +55,24 @@ class LoginScreen(Screen):
    
 
 class MainScreen(Screen):
-    accent1k = ListProperty(primaryAccent)
+    pass
 
 class AmbulatoraisZurnals(Screen):
     pass
 
 class WindowManager(ScreenManager):
-    pass
+    primaryWhiteKV = ListProperty(colorConfig.primaryWhite)         #FFFFFF
+    secondaryWhiteKV = ListProperty(colorConfig.secondaryWhite)     #EEEEF3
+    transparentGrayKV = ListProperty(colorConfig.transparentGray)
+
+    lightGrayKV = ListProperty(colorConfig.lightGray)               #C3C6D6
+    primaryGrayKV = ListProperty(colorConfig.primaryGray)           #4B4D58
+    primaryBlackKV = ListProperty(colorConfig.primaryBlack)         #212227
+    secondaryBlackKV = ListProperty(colorConfig.secondaryBlack)
+
+    primaryAccentKV = ListProperty(colorConfig.primaryAccent)       #D864D9
+    accentGreenKV = ListProperty(colorConfig.accentGreen)           #62C370
+    accentRedKV = ListProperty(colorConfig.accentRed)               #D52941
 
 with db.connect('datubaze.db') as con:
     cur = con.execute("""SELECT * FROM skolenu_saraksts ORDER BY klase, klases_burts, vards_uzvards
@@ -118,7 +130,7 @@ class Ieraksti(BoxLayout):
     def update(self,id):
         self.clear_widgets()
         with db.connect('datubaze.db') as con:
-            cur = con.execute(f"""SELECT * FROM ambulatorais_zurnals WHERE skolena_id = {id}""")
+            cur = con.execute(f"""SELECT * FROM ambulatorais_zurnals WHERE skolena_id = {id} ORDER BY date(datums, 'DD.MM.YY') ASC, time(laiks, 'HH:mm') ASC""")
             ieraksti = cur.fetchall()
             self.spacing = 1
             for i in ieraksti:
@@ -194,13 +206,14 @@ class Profile(BoxLayout):
         
     def update(self,id):
         self.clear_widgets()
+        '''
         with db.connect('datubaze.db') as con:
             cur = con.execute(f"""SELECT * FROM skolenu_saraksts WHERE skolena_id = {id}""")
             skolnieks = cur.fetchone()
      
             self.orientation = 'vertical'
 
-            box = RoundedBox(box_color=primaryWhite ,corner_radius=[0,], orientation = 'vertical', image_source='..\\images\\background.png')
+            box = RoundedBox(box_color=primaryWhite ,corner_radius=[0,], orientation = 'vertical', image_source='')
 
             name = Label(text=f'[b]{skolnieks[3]} {skolnieks[1]}.{skolnieks[2]}[/b]', size_hint_y = None, height= 120,  halign='center', valign='middle', padding=(5,5), text_size=(None, None), font_size=40, markup=True, color=primaryBlack)
             name.bind(size=self.on_button_size)
@@ -253,7 +266,67 @@ class Profile(BoxLayout):
             box.add_widget(main_content_box)
 
             self.add_widget(box)
+        '''
+        with db.connect('datubaze.db') as con:
+            cur = con.execute(f"""SELECT * FROM skolenu_saraksts WHERE skolena_id = {id}""")
+            skolnieks = cur.fetchone()
+     
+            self.orientation = 'vertical'
 
+            box = RoundedBox(box_color=primaryWhite ,corner_radius=[0,], orientation = 'vertical', image_source='..\\images\\background.png')
+
+            name = Label(text=f'[b]{skolnieks[3]} {skolnieks[1]}.{skolnieks[2]}[/b]', size_hint_y = None, height= 120,  halign='center', valign='middle', padding=(5,5), text_size=(None, None), font_size=40, markup=True, color=primaryWhite)
+            name.bind(size=self.on_button_size)
+
+            main_content_box = BoxLayout(orientation='vertical')
+
+            user_data = BoxLayout(orientation='horizontal',size_hint_y=None, height=150)
+
+            nosaukumi = Label(text='Personas kods:\nDzimšanas dati:\nTelefona nummurs:\nMed. Karte:\nHroniskās slimības', halign='left', valign='top', padding=(10,10), text_size=(None, None), font_size=20, color=secondaryWhite)
+            nosaukumi.bind(size=self.on_button_size)
+
+            dati = Label(text=f'{skolnieks[4]}\n{skolnieks[5]}\n{skolnieks[6]}\n{skolnieks[7]}\n{skolnieks[8]}', height=150,halign='right', valign='top', padding=(10,10), text_size=(None, None), font_size=20, color=secondaryWhite)
+            dati.bind(size=self.on_button_size)
+
+            user_data.add_widget(nosaukumi)
+            user_data.add_widget(dati)
+
+            main_content_box.add_widget(user_data)
+
+            piezimes_box = BoxLayout(orientation='vertical',padding=10)
+
+            p_nosaukums = Label(text='Piezimes:',size_hint_y=None, height=40, halign='left', valign='top',padding=(10,10), text_size=(None, None), font_size=20, color=secondaryWhite)
+            p_nosaukums.bind(size=self.on_button_size)
+
+            piezimes = RoundedBox(box_color=transparentGray,corner_radius=[10,],padding=10)
+            piezimes_text = Label(text=f'{skolnieks[9]}',text_size=(None, None), font_size=20,halign='left', valign='top',color=primaryWhite)
+            piezimes_text.bind(size=self.on_button_size)
+            
+            piezimes.add_widget(piezimes_text)
+
+            piezimes_box.add_widget(p_nosaukums)
+            piezimes_box.add_widget(piezimes)
+
+            main_content_box.add_widget(piezimes_box)
+
+            tool_box = BoxLayout(orientation='horizontal',size_hint_y=None,height=80)
+            filler = Label()
+            tool_box.add_widget(filler)
+            eddit_button = Button(color=lightGray,size_hint=(None,None),size=(60, 60),
+                                background_normal = "..\\images\\userUp.png",
+                                background_down = "..\\images\\userDown.png",
+                                background_color = lightGray
+                                )
+            
+            tool_box.add_widget(eddit_button)
+            
+            main_content_box.add_widget(tool_box)
+
+            box.add_widget(name)
+            box.add_widget(main_content_box)
+
+            self.add_widget(box)
+        
     def on_button_size(self, instance, size):
         instance.text_size = size
         
@@ -287,7 +360,7 @@ class List(BoxLayout):
                 self.add_widget(button)
                             
     def set_variable(self,id,button_object): # Metode, kura atbild par to lai informācija par skolēnu nomainās uz ekrāna
-        
+        #Window.toggle_fullscreen()
         #=========================================================================================================# Skolena info
         self.parent.parent.parent.parent.parent.ids.profile.update(id)
         #=========================================================================================================#

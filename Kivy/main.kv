@@ -82,7 +82,7 @@ WindowManager:
             canvas.before:
 
                 Color:
-                    rgba: root.accent1k #6/255, 214/255, 160/255, 1 #06D6A0
+                    rgba: root.manager.primaryAccentKV
                 RoundedRectangle:
                     pos: self.pos
                     size: self.size
@@ -118,16 +118,16 @@ WindowManager:
                 color: 250/255, 250/255, 255/255, 1
             Button:
                 background_normal: ""
-                background_color: 250/255, 250/255, 255/255, 1
-                color: 41/225, 41/225, 40/255, 1
+                background_color: root.manager.secondaryBlackKV
+                color: root.manager.primaryWhiteKV
                 text:"Ambulatorais Žurnāls"
                 on_release:
                     app.root.current = "zurnals"
                     root.manager.transition.direction = "left"
             Button:
                 background_normal: ""
-                background_color: 250/255, 250/255, 255/255, 1
-                color: 41/225, 41/225, 40/255, 1
+                background_color: root.manager.secondaryBlackKV
+                color: root.manager.primaryWhiteKV
                 text:"..."#papildus iestatijumi
                 size_hint: 0.15, 1
                    
@@ -219,8 +219,8 @@ WindowManager:
             size_hint: 1, 0.08
             Button:
                 background_normal: ""
-                background_color: 250/255, 250/255, 255/255, 1
-                color: 41/225, 41/225, 40/255, 1
+                background_color: root.manager.secondaryBlackKV
+                color: root.manager.primaryWhiteKV
                 text: "Skolēnu saraksts"
                 on_release:
                     app.root.current = "main"
@@ -232,8 +232,8 @@ WindowManager:
                 color: 250/255, 250/255, 255/255, 1
             Button:
                 background_normal: ""
-                background_color: 250/255, 250/255, 255/255, 1
-                color: 41/225, 41/225, 40/255, 1
+                background_color: root.manager.secondaryBlackKV
+                color: root.manager.primaryWhiteKV
                 text:"..."#papildus iestatijumi
                 size_hint: 0.15, 1
         Label:
