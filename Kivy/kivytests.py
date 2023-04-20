@@ -114,52 +114,7 @@ class Profile(BoxLayout):
 
         box = RoundedBox(box_color=(1,1,1,1),corner_radius=[10,],orientation = 'vertical')
 
-        name = Label(text='[b]Aleksejs Šematjuks[/b]', size_hint_y = None, height= 120,  halign='center', valign='middle', padding=(5,5), text_size=(None, None), font_size=40, markup=True, color=(0.1,0.1,0.1,1))
-        name.bind(size=self.on_button_size)
-
-        main_content_box = BoxLayout(orientation='vertical')
-
-        user_data = BoxLayout(orientation='horizontal',size_hint_y=None, height=150)
-
-        nosaukumi = Label(text='Personas kods:\nDzimšanas dati:\nTelefona nummurs:\nMed. Karte:\nHroniskās slimības', halign='left', valign='top', padding=(10,10), text_size=(None, None), font_size=20, color=(0.2,0.2,0.2,1))
-        nosaukumi.bind(size=self.on_button_size)
-
-        dati = Label(text='191203-20827\n19/12/2003\n+37126059490\n-\n-', height=150,halign='right', valign='top', padding=(10,10), text_size=(None, None), font_size=20, color=(0.2,0.2,0.2,1))
-        dati.bind(size=self.on_button_size)
-
-        user_data.add_widget(nosaukumi)
-        user_data.add_widget(dati)
-
-        main_content_box.add_widget(user_data)
-
-        piezimes_box = BoxLayout(orientation='vertical',padding=10)
-
-        p_nosaukums = Label(text='Piezimes:',size_hint_y=None, height=40, halign='left', valign='top',padding=(10,10), text_size=(None, None), font_size=20, color=(0.2,0.2,0.2,1))
-        p_nosaukums.bind(size=self.on_button_size)
-
-        piezimes = RoundedBox(box_color=(0.9,0.9,0.9,1),corner_radius=[10,])
-
-        piezimes_box.add_widget(p_nosaukums)
-        piezimes_box.add_widget(piezimes)
-
-        main_content_box.add_widget(piezimes_box)
-
-        tool_box = BoxLayout(orientation='horizontal',size_hint_y=None,height=80)
-        filler = Label()
-        tool_box.add_widget(filler)
-        eddit_button = Button(color=(0.2,0.2,0.2,1),size_hint=(None,None),size=(80,80),
-                              background_normal = "..\\images\\userUp.png",
-                              background_down = "..\\images\\userDown.png",
-                              background_color = (.8,.8,.8,1)
-                              )
         
-        tool_box.add_widget(eddit_button)
-        
-        main_content_box.add_widget(tool_box)
-
-        box.add_widget(name)
-        box.add_widget(main_content_box)
-
         self.add_widget(box)
 
     def on_button_size(self, instance, size):
@@ -167,7 +122,7 @@ class Profile(BoxLayout):
 
 class MyApp(App):
     def build(self):
-        Window.size = (600, 800)
+        Window.size = (800, 400)
         return Profile()
 
 
