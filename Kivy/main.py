@@ -85,8 +85,10 @@ class IerakstiPopup(Popup):
         self.id = id
         self.size_hint = (None,None)
         self.size = (800,400)
-        self.title =f'{self.id}'
-        #box = RoundedBox()
+        self.title =''
+        self.title_size='0sp'
+        self.separator_height=0
+        #box = Label(text=f'{self.id}')
         #self.content(box)
 
 class RoundedBox(BoxLayout):
@@ -215,7 +217,7 @@ class IzveidotIerakstu(Button):
         popup_layout = BoxLayout()
         popup_button = Button(text='Close')
         popup_layout.add_widget(popup_button)
-        popup = Popup(title='Ieraksta izveide', content=popup_layout, size_hint=(None, None), size=(600, 400),background="", separator_color=primaryAccent, title_color=primaryBlack)
+        popup = Popup(title='', content=popup_layout, size_hint=(None, None), size=(600, 400),background="",title_size='0sp',separator_height=0)
         popup_button.bind(on_press=popup.dismiss)
         popup.open()
         
