@@ -5,6 +5,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.togglebutton import ToggleButton
 from kivy.metrics import dp
 from kivy.properties import StringProperty, ObjectProperty, ListProperty
 import sqlite3 as db
@@ -16,8 +17,8 @@ from kivy.graphics import Color, RoundedRectangle, Rectangle
 from functools import partial
 from kivy.clock import Clock
 from kivy.uix.popup import Popup
-
-import colorConfig
+from kivy.uix.textinput import TextInput
+import colorsPython as colorConfig
 
 from ctypes import windll, c_int64
 
@@ -79,18 +80,6 @@ with db.connect('datubaze.db') as con:
     """)
     skoleni = cur.fetchall()
 
-class IerakstiPopup(Popup):
-    def __init__(self,id, **kwargs):
-        super().__init__(**kwargs)
-        self.id = id
-        self.size_hint = (None,None)
-        self.size = (800,400)
-        self.title =''
-        self.title_size='0sp'
-        self.separator_height=0
-        #box = Label(text=f'{self.id}')
-        #self.content(box)
-
 class RoundedBox(BoxLayout):
     def __init__(self, box_color, corner_radius, image_source='', **kwargs):
         super().__init__(**kwargs) 
@@ -133,6 +122,102 @@ class RoundedButton(Button):
         Color(rgba=primaryWhite)
         self.corner.pos = self.pos
         self.corner.size = self.size
+        
+class CostumToggleButton(ToggleButton):
+    def __init__(self, **kwargs):
+        super(CostumToggleButton, self).__init__(**kwargs)
+        self.bind(state=self.on_toggle)
+    
+    def on_toggle(self, instance, value):
+        if value == 'normal':
+            instance.text = 'Nav'
+        else:
+            instance.text = 'Ir'        
+            
+class IerakstiPopup(Popup):
+    def __init__(self,id, **kwargs):
+        super().__init__(**kwargs)
+        self.id = id
+        self.size_hint = (None,None)
+        self.size = (800,400)
+        self.title =''
+        self.title_size='0sp'
+        self.separator_height=0
+        self.background_color = (0,0,0,0)
+        
+        box = RoundedBox(box_color = primaryWhite, corner_radius = [10,], orientation='vertical')
+        
+        top_panel = BoxLayout(orientation='horizontal')
+        
+        name = Label(text=f'{id[4]} {id[5]}',color=primaryBlack)
+        discard_button = RoundedButton(text='//')
+        
+        top_panel.add_widget(name)
+        top_panel.add_widget(discard_button)
+        
+        main_panel = BoxLayout(orientation='horizontal')
+        
+        #====== Sgnietā palīdzība un Simptomi ====#
+        content1 = BoxLayout(orientation='vertical')
+        simptomi = TextInput(multiline=False, text=f'{id[6]}')
+        sniegta_p = TextInput(multiline=False, text=f'{id[7]}')
+        
+        content1.add_widget(simptomi)
+        content1.add_widget(sniegta_p)
+        
+        main_panel.add_widget(content1)
+        #=========================================#
+        
+        #====== Piezīmes un pārējie parametri ====#
+        content2 = BoxLayout(orientation='horizontal')
+        
+        piezimes = TextInput(multiline=False, text=f'{id[9]}')
+        
+        trauma_time = BoxLayout(orientation='vertical')
+        
+        trauma_box = BoxLayout(orientation='horizontal')
+        trauma_label = Label (text='Trauma',color=primaryBlack)
+        trauma_toggle = CostumToggleButton(text='Nav')
+        
+        trauma_box.add_widget(trauma_label)
+        trauma_box.add_widget(trauma_toggle)
+        
+        time_date = BoxLayout(orientation='vertical')
+        time = TextInput(multiline=False, text=f'{id[3]}')
+        date = TextInput(multiline=False, text=f'{id[2]}')
+        
+        time_date.add_widget(time)
+        time_date.add_widget(date)
+        
+        trauma_time.add_widget(trauma_box)
+        trauma_time.add_widget(time_date)
+         
+        content2.add_widget(piezimes)
+        content2.add_widget(trauma_time)
+        main_panel.add_widget(content2)
+        #=========================================#
+        
+        action_panel = BoxLayout(orientation='horizontal')
+        
+        cancel_button = RoundedButton(background_color = (0,0,0,0),
+                                      color= primaryBlack,
+                                      background_normal="",
+                                      text='Atcelt')
+        save_button = RoundedButton(background_color = (0,0,0,0),
+                                      color= primaryBlack,
+                                      background_normal="",
+                                      text='Saglabāt')
+        
+        action_panel.add_widget(cancel_button)
+        action_panel.add_widget(save_button)
+        
+        box.add_widget(top_panel)
+        box.add_widget(main_panel)
+        box.add_widget(action_panel)
+        
+        self.content = box
+  
+
 
 class Ieraksti(BoxLayout):
     def __init__(self, **kwargs):
