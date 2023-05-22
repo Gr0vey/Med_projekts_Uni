@@ -195,6 +195,9 @@ class IerakstiPopup(Popup):
         content2.add_widget(piezimes)
         content2.add_widget(trauma_time)
         main_panel.add_widget(content2)
+
+        self.inputs = [simptomi, sniegta_p, piezimes, time, date, trauma_toggle]
+        
         #=========================================#
         
         action_panel = BoxLayout(orientation='horizontal')
@@ -206,7 +209,8 @@ class IerakstiPopup(Popup):
         save_button = RoundedButton(background_color = (0,0,0,0),
                                       color= primaryBlack,
                                       background_normal="",
-                                      text='Saglabāt')
+                                      text='Saglabāt',
+                                      on_release=self.save_record)
         
         action_panel.add_widget(cancel_button)
         action_panel.add_widget(save_button)
@@ -216,6 +220,15 @@ class IerakstiPopup(Popup):
         box.add_widget(action_panel)
         
         self.content = box
+
+    def save_record(self, instance):
+        output = []
+        for i in self.inputs:
+            output.append(i.text)
+
+        with db.connect('datubaze.db') as con:
+            con.execute(f"""""")
+        
   
 
 
