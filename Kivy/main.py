@@ -175,12 +175,12 @@ class IerakstiPopup(Popup):
         
         trauma_time = BoxLayout(orientation='vertical')
         
-        trauma_box = BoxLayout(orientation='horizontal')
+        trauma_boxx = BoxLayout(orientation='horizontal')
         trauma_label = Label (text='Trauma',color=primaryBlack)
         trauma_toggle = CostumToggleButton(text='Nav')
         
-        trauma_box.add_widget(trauma_label)
-        trauma_box.add_widget(trauma_toggle)
+        trauma_boxx.add_widget(trauma_label)
+        trauma_boxx.add_widget(trauma_toggle)
         
         time_date = BoxLayout(orientation='vertical')
         time = TextInput(multiline=False, text=f'{id[3]}')
@@ -189,7 +189,7 @@ class IerakstiPopup(Popup):
         time_date.add_widget(time)
         time_date.add_widget(date)
         
-        trauma_time.add_widget(trauma_box)
+        trauma_time.add_widget(trauma_boxx)
         trauma_time.add_widget(time_date)
          
         content2.add_widget(piezimes)
@@ -205,7 +205,9 @@ class IerakstiPopup(Popup):
         cancel_button = RoundedButton(background_color = (0,0,0,0),
                                       color= primaryBlack,
                                       background_normal="",
-                                      text='Atcelt')
+                                      text='Atcelt',
+                                      on_release=self.dismiss)
+
         save_button = RoundedButton(background_color = (0,0,0,0),
                                       color= primaryBlack,
                                       background_normal="",
@@ -225,13 +227,21 @@ class IerakstiPopup(Popup):
         output = []
         for i in self.inputs:
             output.append(i.text)
-
+        #['Simptomi', 'Sniegtā palīdzība', 'Bez piezīmēm', '11:03', '19.4.2023', 'Nav']
         with db.connect('datubaze.db') as con:
-            con.execute(f"""""")
+            con.execute(f"""UPDATE ambulatorais_zurnals SET 
+                        datums = '{output[4]}', 
+                        laiks = '{output[3]}',
+                        simptomi = '{output[0]}',
+                        sniegta_palidz = '{output[1]}',
+                        trauma = '{output[5]}',
+                        ipasa_piezimes = '{output[2]}'
+                        WHERE ieraksta_id = {self.id[0]}""")
+            
+        self.parent.parent.ids.ieraksti.update(id)
         
-  
-
-
+        self.dismiss
+        
 class Ieraksti(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -247,10 +257,11 @@ class Ieraksti(BoxLayout):
             for i in ieraksti:
                 box = RoundedBox(orientation='horizontal', size_hint_y=None, height=230, box_color=primaryWhite, corner_radius=[10,])
                 
-                if i[8] == 'nav':
+                if i[8] == 'Nav':
                     trauma_box = RoundedBox(size_hint_x=None, width=20,box_color=accentGreen, corner_radius=[10,0,0,10])
-                elif i[8] == 'ir':
+                elif i[8] == 'Ir':
                     trauma_box = RoundedBox(size_hint_x=None, width=20,box_color=accentRed, corner_radius=[10,0,0,10])
+                    
                 box.add_widget(trauma_box)
                 
                 main_content_box = BoxLayout(orientation='vertical',padding=(10,10,10,5))
@@ -426,6 +437,7 @@ class List(BoxLayout):
 
         #=========================================================================================================# Ierakstu info
         self.parent.parent.parent.parent.parent.ids.ieraksti.update(id)
+        print(self.parent.parent.parent.parent.parent.parent.parent)
         #=========================================================================================================#
           
 kv = Builder.load_file("main.kv")
