@@ -237,10 +237,10 @@ class IerakstiPopup(Popup):
                         trauma = '{output[5]}',
                         ipasa_piezimes = '{output[2]}'
                         WHERE ieraksta_id = {self.id[0]}""")
-            
-        self.parent.parent.ids.ieraksti.update(id)
+
+        App.get_running_app().root.get_screen('main').ids.ieraksti.update(self.id[1]) # Iegūst saraksta metodi un izmanto
         
-        self.dismiss
+        Clock.schedule_once(lambda dt: self.dismiss(), 0.1) # Taimeris kurš aizver logu
         
 class Ieraksti(BoxLayout):
     def __init__(self, **kwargs):
@@ -296,7 +296,7 @@ class Ieraksti(BoxLayout):
                 content_box.add_widget(si_un_pa_box)
                 
                 piezimes_layout = RoundedBox(orientation='vertical', box_color=secondaryWhite, corner_radius=[5,])
-                piezimes_box = Label(text=f'{i[9]}',size_hint=(0.4,1), halign='left', valign='top', padding=(5,5), text_size=(None, None),color=primaryBlack)
+                piezimes_box = Label(text=f'{i[9]}',size_hint=(1,1), halign='left', valign='top', padding=(5,5), text_size=(None, None),color=primaryBlack)
                 piezimes_box.bind(size=self.on_button_size)
                 
                 piezimes_layout.add_widget(piezimes_box)
@@ -437,7 +437,6 @@ class List(BoxLayout):
 
         #=========================================================================================================# Ierakstu info
         self.parent.parent.parent.parent.parent.ids.ieraksti.update(id)
-        print(self.parent.parent.parent.parent.parent.parent.parent)
         #=========================================================================================================#
           
 kv = Builder.load_file("main.kv")
