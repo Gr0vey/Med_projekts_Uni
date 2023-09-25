@@ -130,12 +130,7 @@ WindowManager:
                 on_release:
                     app.root.current = "zurnals"
                     root.manager.transition.direction = "left"
-            Button:
-                background_normal: ""
-                background_color: root.manager.black_c[0]
-                color: root.manager.white_c[0]
-                text:"..."#papildus iestatijumi
-                size_hint: 0.15, 1
+            Options_button:
                    
         BoxLayout:
             orientation: "horizontal"

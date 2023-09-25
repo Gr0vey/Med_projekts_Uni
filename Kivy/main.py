@@ -23,6 +23,10 @@ from ctypes import windll, c_int64
 import ast
 from UIcolors import *
 from datetime import datetime
+from kivy.uix.filechooser import FileChooserListView, FileChooserIconView
+from kivy.uix.spinner import Spinner
+import os
+import pandas as pd
 
 windll.user32.SetProcessDpiAwarenessContext(c_int64(-4)) #izmēra pielagošana
 Config.set('input', 'mouse', 'mouse,disable_multitouch') #multitouch atslēgšana
@@ -42,6 +46,15 @@ def rgb_to_kivy(color): # Funkcija kas parveido rgb hex formata krāsu Kivy piem
 def parse_date_time(date_str, time_str):
     # Assuming date_str is in format DD.MM.YY and time_str is in format HH:mm
     return datetime.strptime(f"{date_str} {time_str}", "%d.%m.%y %H.%M")
+
+def max_row_length(arr_2d):
+    max_length = 0
+    for row in arr_2d:
+        row_length = len(row)
+        if row_length > max_length:
+            max_length = row_length
+
+    return max_length
 
 def sort_data_by_date_time(data_array, date_index, time_index, reverse=True):
     return sorted(data_array, key=lambda x: parse_date_time(x[date_index], x[time_index]), reverse=reverse)
@@ -173,6 +186,98 @@ class CostumToggleButton(BoxLayout):
 #=====================================================================================#
 
 #===============================# Popups #===============================#
+class File_display(Popup):
+    def __init__(self, records, **kwargs):
+        super().__init__(**kwargs)
+        self.records = records
+        
+        self.size_hint = (None,None)
+        self.size = (1000,600)
+        self.title =''
+        self.title_size='0sp'
+        self.separator_height=0
+        
+        self.main_box = BoxLayout(orientation = 'vertical')
+        self.content = self.main_box
+        
+        self.main_box.add_widget(Label(text='Kolonnu izvēle:',size_hint=(None,None),size=(200,40)))
+        
+        top_row = BoxLayout(orientation = 'horizontal',size_hint_y=None, height=40)
+        for i in range(max_row_length(self.records)):
+            drop_button = Spinner(text='-izvēlēties kolonnu-',
+                                  values=['Klase',
+                                          'Vārds Uzvārds',
+                                          'Personas kods',
+                                          'Telefona nummurs',
+                                          'Dzimšanas datums'])
+                
+            top_row.add_widget(drop_button)
+        self.main_box.add_widget(top_row)
+        
+        self.main_box.add_widget(Label(text='Datu priekšskats:',size_hint=(None,None),size=(200,40)))
+        
+        bottom_row = BoxLayout(orientation = 'vertical')
+        
+        if len(self.records)<5:
+            show_count = len(self.records)
+        else:
+            show_count = 5
+            
+        for i in range(show_count):
+            temp_layout = BoxLayout(orientation = 'horizontal')
+            for j in range(max_row_length(self.records)):
+                temp_layout.add_widget(Label(text=f'{self.records[i][j]}'))
+            bottom_row.add_widget(temp_layout)
+        self.main_box.add_widget(bottom_row)
+        
+        commit = Button(text='Commit',size_hint=(None,None),size=(200,40),
+                        on_release=self.dismiss)
+        self.main_box.add_widget(commit)
+        
+class Choose_file(Popup):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
+        self.size_hint = (None,None)
+        self.size = (1000,600)
+        self.title =''
+        self.title_size='0sp'
+        self.separator_height=0
+        self.main_box = BoxLayout(orientation = 'vertical')
+        self.content = self.main_box
+        
+        self.file_view = FileChooserListView(path = os.path.expanduser("~"),
+                                            filters=['*.xlsx', '*.csv'])
+        self.main_box.add_widget(self.file_view)
+        
+        choice_button = Button(text='open',size_hint = (None,None), size = (100,40))
+        choice_button.bind(on_press=self.select_file)
+        self.main_box.add_widget(choice_button)
+        
+    def select_file(self, instance):
+        selected_file = self.file_view.selection
+        if selected_file:
+            file_path = selected_file[0]
+            
+            if file_path.lower().endswith(".xlsx"): # ================= # .xlsx files
+                try:
+                    data = pd.read_excel(file_path).values.tolist()
+                    print(data)
+                    File_display(data).open()
+                    
+                except Exception as e:
+                    print(f"Failed to read XLSX file: {str(e)}")
+                
+                self.dismiss()
+                
+            elif file_path.lower().endswith(".csv"): # ================= # .csv files
+                try:
+                    data = pd.read_csv(file_path)
+                    print("This is a CSV file turned into a 2D array:")
+                    print(data)
+                except Exception as e:
+                    print(f"Failed to read CSV file: {str(e)}")
+                    
 class IerakstiPopup(Popup):
     def __init__(self,id, **kwargs):
         super().__init__(**kwargs)
@@ -876,7 +981,25 @@ class Ieraksti(BoxLayout):
     
     def set_variable(self,id,button_object):
         IerakstiPopup(id=id).open()
-                
+        
+class Options_button(Spinner):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.text = '...' 
+        self.values = ['Import file']  
+        self.size_hint = (None,None)
+        self.size = (200,50)
+        self.bind(text=self.on_spinner_select)
+        
+    def on_spinner_select(self, instance, text):
+        self.text = '...'
+        if text == 'Import file':
+            self.import_file()
+        else: print('went wrong')
+
+    def import_file(self):
+        Choose_file().open()
+        
 class IzveidotIerakstu(Button):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
