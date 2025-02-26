@@ -1,0 +1,1 @@
+Šobrīdējais README
