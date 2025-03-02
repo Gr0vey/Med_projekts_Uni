@@ -115,11 +115,4 @@ Lai piedāvātu funkcionalitātes ieteikumus vai ziņotu par kļūdām, lūdzu, 
 
 ---
 
-## Sazināties (iekļāvu iekšā, ja būs vajadzība)
-
-Ja jums ir jautājumi, atsauksmes vai sadarbības pieprasījumi, lūdzu, sazinieties ar mums:
-
-- GitHub problēmas: Ziņojiet par kļūdām vai piedāvājiet funkcijas
-- E-pasts: [mūsu kontaktinformācija šeit]
-- Kopienas forumi: Sazinieties ar citiem lietotājiem un izstrādātājiem (nedomāju, ka kāds šo izmantos, bet var mierīgi izdzēst ja nav vajadzīgs.)
 
