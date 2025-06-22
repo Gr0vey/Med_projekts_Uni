@@ -97,7 +97,7 @@ Med_projekts_Uni/
 
 ---
 
-## Ieguldījumi  (it kā ieguldījumi ir pareizi uzrakstīts un tulkojums no 'Contribution', bet domāju, ka šo var savādāk nosaukt. Ja nē, tad lai paliek.)
+## Ieguldījumi (Contribution)
 
 Ieguldījumi MedSistēma projektā ir laipni gaidīti! Ja vēlaties uzlabot projektu, varat:
 
@@ -111,7 +111,7 @@ Lai piedāvātu funkcionalitātes ieteikumus vai ziņotu par kļūdām, lūdzu, 
 
 ---
 
-## Licence (placeholder šobrīd, kuru mēs izmantojam?)
+## Licence 
 
 ---
 
