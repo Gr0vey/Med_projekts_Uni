@@ -12,7 +12,7 @@ from kivy.properties import StringProperty, ObjectProperty, ListProperty
 import sqlite3 as db
 import kivy
 from kivy.config import Config
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition
 from kivy.core.window import Window
 from kivy.graphics import Color, RoundedRectangle, Rectangle, Line
 from functools import partial
@@ -28,9 +28,11 @@ from kivy.uix.spinner import Spinner
 import os
 import pandas as pd
 
-windll.user32.SetProcessDpiAwarenessContext(c_int64(-4)) #izmēra pielagošana
-Config.set('input', 'mouse', 'mouse,disable_multitouch') #multitouch atslēgšana
+windll.user32.SetProcessDpiAwarenessContext(c_int64(-4))  # DPI scaling adjustment
+Config.set('input', 'mouse', 'mouse,disable_multitouch')  # Disable multitouch
 Config.set('graphics', 'custom_titlebar', '1')
+Config.set('graphics', 'maxfps', '60')  # Limit FPS for performance
+Config.set('graphics', 'vsync', '1')  # Enable vsync
 
 kivy.require("2.0.0")
 active_skolens = -1
@@ -72,6 +74,11 @@ class AmbulatoraisZurnals(Screen):
     pass
 
 class WindowManager(ScreenManager):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # Disable transitions for better performance
+        self.transition = NoTransition()
+    
     main_c   = main_c
     red_c    = red_c
     green_c  = green_c
